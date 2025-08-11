@@ -57,7 +57,7 @@ def command_actions(self) -> CommandActionType:
 
 ## Logs
 
-```text
+```
 2025-08-11 10:29:37,615 - INFO - _message_receiver : {"ok": true, "result": []}
 2025-08-11 10:29:43,812 - INFO - _message_receiver : {"ok": true, "result": [{"update_id": 466157805, "message": {"message_id": 2103, "from": {"id": USER_ID, "is_bot": false, "first_name": "USER_NAME", "username": "user_anonymized", "language_code": "fr"}, "chat": {"id": USER_ID, "first_name": "USER_NAME", "username": "user_anonymized", "type": "private"}, "date": 1754900983, "text": "/start", "entities": [{"offset": 0, "length": 6, "type": "bot_command"}]}}]}
 2025-08-11 10:29:47,364 - INFO - _message_receiver : {"ok": true, "result": [{"update_id": 466157806, "message": {"message_id": 2104, "from": {"id": USER_ID, "is_bot": false, "first_name": "USER_NAME", "username": "user_anonymized", "language_code": "fr"}, "chat": {"id": USER_ID, "first_name": "USER_NAME", "username": "user_anonymized", "type": "private"}, "date": 1754900987, "text": "/help", "entities": [{"offset": 0, "length": 5, "type": "bot_command"}]}}]}
@@ -653,5 +653,4 @@ Le bot confirme la mise à jour du prix de vente pour la position `POSITION_ID` 
    |---- Envoie pourcentage ----------------------------------------->|
    |                                                                  |
    |<--- Confirmation mise à jour prix -------------------------------|
-
 ```
