@@ -68,9 +68,9 @@ class TelegramNotificationService(BaseService):
         for handler in self._telegram_handlers:
             for _, value in handler.command_actions.items():
                 if command_key in value:
-                    logger.debug("Commande trouvée: %s dans handler %s", command_key, handler.__class__.__name__)
+                    # logger.debug("Commande trouvée: %s dans handler %s", command_key, handler.__class__.__name__)
                     return value.get(command_key, {})
-        logger.debug("Commande non trouvée: %s", command_key)
+        # logger.debug("Commande non trouvée: %s", command_key)
         return {}
 
     def process_commands(self):
@@ -84,7 +84,7 @@ class TelegramNotificationService(BaseService):
                     logger.info("Signal d'arrêt reçu, fin du traitement des commandes")
                     break
 
-                logger.debug("Mise à jour reçue: %s", update)
+                # logger.debug("Mise à jour reçue: %s", update)
                 messages: list[TelegramPayload] = []
                 chat_id, msg_type, content = self.parse_update(update)
 
@@ -93,10 +93,10 @@ class TelegramNotificationService(BaseService):
                     continue
 
                 if msg_type == 'text':
-                    logger.debug("Traitement d'un message texte: %s", content['text'])
+                    # logger.debug("Traitement d'un message texte: %s", content['text'])
                     messages = self._handle_text_message(content['text'], chat_id)
                 elif msg_type == 'callback_query':
-                    logger.debug("Traitement d'une callback_query: %s", content)
+                    # logger.debug("Traitement d'une callback_query: %s", content)
                     messages = self._handle_callback_query(update, chat_id)
                 else:
                     logger.warning("Type de message inconnu: %s", msg_type)
@@ -108,7 +108,7 @@ class TelegramNotificationService(BaseService):
                     logger.debug("Aucun message à envoyer pour cette mise à jour")
 
             except queue.Empty:
-                logger.debug("Aucune mise à jour dans la file d'attente")
+                # logger.debug("Aucune mise à jour dans la file d'attente")
                 time.sleep(0.1)
             except Exception as e:
                 logger.exception(f"Erreur lors du traitement de la commande: %s", e)
@@ -116,7 +116,7 @@ class TelegramNotificationService(BaseService):
     def _handle_callback_query(self, update: dict, chat_id: int) -> list[TelegramPayload]:
         """Traite une requête de callback Telegram."""
         action, enum, arguments = self.parse_command(update)
-        logger.debug("Callback query: action=%s, enum=%s, arguments=%s", action, enum, arguments)
+        # logger.debug("Callback query: action=%s, enum=%s, arguments=%s", action, enum, arguments)
 
         if action in self._interactive_prompts:
             return self._process_interactive_prompt(action, enum, arguments, chat_id)
@@ -129,7 +129,7 @@ class TelegramNotificationService(BaseService):
                     for menu, actions in handler.command_actions.items():
                         if enum == menu:
                             sub_menu_actions.update(actions)
-                logger.debug("Menu affiché: %s", sub_menu_actions.keys())
+                # logger.debug("Menu affiché: %s", sub_menu_actions.keys())
                 return self.menu_keyboard(list(sub_menu_actions.keys()))
             else:
                 logger.warning(f"Type d'enum non reconnu ou enum est None: %s", enum)
@@ -138,19 +138,19 @@ class TelegramNotificationService(BaseService):
     # noinspection PyUnresolvedReferences
     def _handle_text_message(self, text: str, chat_id: int) -> list[TelegramPayload]:
         """Traite un message texte reçu."""
-        logger.debug("Message texte reçu: %s", text)
+        # logger.debug("Message texte reçu: %s", text)
         if text == "/help":  # Comparaison directe avec la valeur de la commande
             top_menu = []
             for handler in self._telegram_handlers:
                 for menu in handler.command_actions:
                     if menu != Menu.from_value("/none"):
                         top_menu.append(menu)
-            logger.debug("Affichage du menu principal: %s", top_menu)
+            # logger.debug("Affichage du menu principal: %s", top_menu)
             return self.menu_keyboard(top_menu)
 
         current_prompt = self._history_manager.get_last_active_prompt(chat_id)
         if current_prompt and current_prompt.action == "ask":
-            logger.debug("Prompt interactif détecté: %s", current_prompt)
+            # logger.debug("Prompt interactif détecté: %s", current_prompt)
             current_prompt.arguments.append(text)
             return self._process_interactive_prompt("respond", current_prompt.command, current_prompt.arguments, chat_id)
 
@@ -167,12 +167,12 @@ class TelegramNotificationService(BaseService):
                 responses.extend(response)
             elif isinstance(response, dict):
                 responses.append(response)
-        logger.debug("Réponses pour la commande %s: %s", command, responses)
+        # logger.debug("Réponses pour la commande %s: %s", command, responses)
         return responses
 
     def _process_interactive_prompt(self, action: str, command: Union[Command, DynamicEnumMember], arguments: list, chat_id: int) -> list[TelegramPayload]:
         """Traite un prompt interactif (ask/respond) avec plusieurs questions."""
-        logger.debug("Traitement du prompt: action=%s, command=%s, arguments=%s", action, command, arguments)
+        # logger.debug("Traitement du prompt: action=%s, command=%s, arguments=%s", action, command, arguments)
         command_details = self._search_in_handlers(command)
 
         if action == "ask":
@@ -184,7 +184,7 @@ class TelegramNotificationService(BaseService):
 
             # Poser la première question
             prompt_message = prompts[0]
-            logger.debug("Envoi du premier message de prompt: %s", prompt_message)
+            # logger.debug("Envoi du premier message de prompt: %s", prompt_message)
             self.send_message(prompt_message)
             new_prompt = CurrentPrompt(action, command, arguments, current_prompt_index=0)
             self._history_manager.log_prompt(new_prompt, chat_id)
@@ -204,7 +204,7 @@ class TelegramNotificationService(BaseService):
             if next_prompt_index < len(prompts):
                 # Poser la question suivante
                 prompt_message = prompts[next_prompt_index]
-                logger.debug("Envoi du message de prompt suivant (index %d): %s", next_prompt_index, prompt_message)
+                # logger.debug("Envoi du message de prompt suivant (index %d): %s", next_prompt_index, prompt_message)
                 self.send_message(prompt_message)
                 current_prompt.current_prompt_index = next_prompt_index
                 self._history_manager.log_prompt(current_prompt, chat_id)
@@ -214,7 +214,7 @@ class TelegramNotificationService(BaseService):
                 handler = command_details.get("respond")
                 if handler:
                     new_arguments = handler(arguments)
-                    logger.debug("Exécution de la commande avec nouveaux arguments: %s", new_arguments)
+                    # logger.debug("Exécution de la commande avec nouveaux arguments: %s", new_arguments)
                     self._history_manager.resolve_active_prompt(chat_id)
                     return self._execute_command(command, new_arguments, chat_id)
                 else:

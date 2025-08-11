@@ -1,3 +1,4 @@
+import json
 import queue
 import re
 import threading
@@ -37,8 +38,8 @@ class BaseService:
         self.__incoming_queue = queue.Queue()
         self.__outgoing_queue = queue.Queue()
 
-        logger.debug("URL d'envoi: %s", self.__url_send)
-        logger.debug("URL de réception: %s", self.__url_updates)
+        # logger.debug("URL d'envoi: %s", self.__url_send)
+        # logger.debug("URL de réception: %s", self.__url_updates)
 
         self.__sender_thread = threading.Thread(target=self._message_sender, daemon=True)
         self.__receiver_thread = threading.Thread(target=self._message_receiver, daemon=True)
@@ -57,7 +58,7 @@ class BaseService:
         """Envoie un ou plusieurs messages à la file d'attente sortante."""
         for message in ensure_list(messages):
             if any(not is_empty_or_none(message.get(key)) for key in ["text", "reply_markup"]):
-                logger.debug("Ajout du message à la file sortante: %s", message)
+                # logger.debug("Ajout du message à la file sortante: %s", message)
                 self.__outgoing_queue.put(message)
             else:
                 logger.warning("Message ignoré (vide ou sans contenu): %s", message)
@@ -69,10 +70,10 @@ class BaseService:
             try:
                 message = self.__outgoing_queue.get_nowait()
                 self.__outgoing_queue.task_done()
-                logger.debug("Message extrait immédiatement: %s", message)
+                # logger.debug("Message extrait immédiatement: %s", message)
                 if message and any(not is_empty_or_none(message.get(key)) for key in ["text", "reply_markup"]):
                     payload = {"chat_id": self.__chat_id, "text": message.get("text", ""), "reply_markup": message.get("reply_markup", "")}
-                    logger.debug("Envoi immédiat du payload à Telegram: %s", payload)
+                    # logger.debug("Envoi immédiat du payload à Telegram: %s", payload)
                     self.__history_manager.log_interaction('outgoing', payload['chat_id'], 'message', payload)
                     self._post(payload)
                 else:
@@ -86,7 +87,7 @@ class BaseService:
             params = {"timeout": 5}
             if self.__last_update_id is not None:
                 params["offset"] = self.__last_update_id + 1
-            logger.debug("Test de l'endpoint getUpdates avec params: %s", params)
+            # logger.debug("Test de l'endpoint getUpdates avec params: %s", params)
             response = requests.get(self.__url_updates, params=params, timeout=(3, 10))
             response.raise_for_status()
             updates = response.json()
@@ -104,17 +105,20 @@ class BaseService:
                 message = self.__outgoing_queue.get(timeout=0.1)
                 self.__outgoing_queue.task_done()
                 if not message:
-                    logger.debug("Message vide reçu dans la file sortante")
+                    # logger.debug("Message vide reçu dans la file sortante")
                     continue
                 if any(not is_empty_or_none(message.get(key)) for key in ["text", "reply_markup"]):
                     payload = {"chat_id": self.__chat_id, "text": message.get("text", ""), "reply_markup": message.get("reply_markup", "")}
-                    logger.debug("Envoi du payload à Telegram: %s", payload)
+                    # logger.debug("Envoi du payload à Telegram: %s", payload)
                     self.__history_manager.log_interaction('outgoing', payload['chat_id'], 'message', payload)
+
+                    logger.info("_message_sender : " + json.dumps(payload))
+
                     self._post(payload)
                 else:
                     logger.warning("Message sans contenu textuel ou markup: %s", message)
             except queue.Empty:
-                logger.debug("Aucune mise à jour dans la file sortante")
+                # logger.debug("Aucune mise à jour dans la file sortante")
                 time.sleep(0.1)
             except Exception as e:
                 logger.exception(f"Erreur lors de l'envoi du message: %s", e)
@@ -125,10 +129,10 @@ class BaseService:
         response: Optional[Response] = None
 
         try:
-            logger.debug("Envoi de la requête POST à %s avec payload: %s", self.__url_send, payload)
+            # logger.debug("Envoi de la requête POST à %s avec payload: %s", self.__url_send, payload)
             response = requests.post(self.__url_send, data=payload, timeout=(3, 10))
             response.raise_for_status()
-            logger.debug("Réponse de l'API Telegram: %s", response.json())
+            # logger.debug("Réponse de l'API Telegram: %s", response.json())
         except requests.HTTPError as e:
             logger.error("Erreur HTTP lors de l'envoi à Telegram: %s, réponse: %s", e, response.text)
             raise
@@ -145,14 +149,17 @@ class BaseService:
                 if self.__last_update_id is not None:
                     params["offset"] = self.__last_update_id + 1
 
-                logger.debug("Envoi de la requête GET à %s avec params: %s", self.__url_updates, params)
+                # logger.debug("Envoi de la requête GET à %s avec params: %s", self.__url_updates, params)
                 response = requests.get(self.__url_updates, params=params, timeout=(3, 30))
                 response.raise_for_status()
                 updates = response.json()
-                if not updates.get("result"):
-                    logger.debug("Aucune mise à jour reçue de Telegram")
-                else:
-                    logger.debug("Mises à jour reçues: %s", updates)
+
+                logger.info("_message_receiver : " + json.dumps(updates))
+
+                # if not updates.get("result"):
+                #     logger.debug("Aucune mise à jour reçue de Telegram")
+                # else:
+                #     logger.debug("Mises à jour reçues: %s", updates)
 
                 for update in updates.get("result", []):
                     self.__last_update_id = update.get("update_id")
@@ -160,7 +167,7 @@ class BaseService:
                     if chat_id:
                         self.__history_manager.log_interaction('incoming', chat_id, message_type, content, update.get("update_id"))
                     self.__incoming_queue.put(update)
-                    logger.debug("Mise à jour ajoutée à la file entrante: %s", update)
+                    # logger.debug("Mise à jour ajoutée à la file entrante: %s", update)
 
             except Exception as e:
                 logger.exception(f"Erreur inconnue dans le thread de réception: %s", e)
