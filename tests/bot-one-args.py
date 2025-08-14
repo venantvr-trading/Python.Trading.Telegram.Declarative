@@ -7,12 +7,48 @@ from typing import Callable, Dict, List, Optional
 import requests
 from dotenv import load_dotenv
 
-from venantvr.telegram.classes.command import Command
 from venantvr.telegram.decorators import COMMAND_REGISTRY
 
 load_dotenv()
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
 CHAT_ID = os.environ.get("CHAT_ID")
+
+
+class DynamicEnumMember:
+    def __init__(self, name: str, value: str, parent_enum: type['DynamicEnum']):
+        self.name = name
+        self.value = value
+        self.parent_enum = parent_enum
+
+    def __repr__(self) -> str:
+        return f"<{self.parent_enum.__name__}.{self.name}: '{self.value}'>"
+
+    def __eq__(self, other) -> bool:
+        if isinstance(other, DynamicEnumMember): return self.value == other.value
+        if isinstance(other, str): return self.value == other
+        return False
+
+    def __hash__(self) -> int:
+        return hash(self.value)
+
+
+class DynamicEnum:
+    _members: dict[str, DynamicEnumMember] = {}
+    _value_map: dict[str, DynamicEnumMember] = {}
+
+    @classmethod
+    def from_value(cls, value: str) -> DynamicEnumMember:
+        if value in cls._value_map: return cls._value_map[value]
+        name = value.lstrip('/').upper().replace("_", "")
+        if not name: name = "ROOT"
+        member = DynamicEnumMember(name, value, parent_enum=cls)
+        cls._members[name] = member
+        setattr(cls, name, member)
+        cls._value_map[value] = member
+        return member
+
+
+class Command(DynamicEnum): pass
 
 
 def command(name: str, description: str = "", asks: Optional[List[str]] = None, kwargs_types: Optional[Dict[str, Callable]] = None):
