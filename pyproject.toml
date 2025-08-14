@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 # Métadonnées du projet (équivalent des arguments de setup() )
-name = "Python.Trading.Telegram"
+name = "Python.Trading.Telegram.Declarative"
 version = "0.1.0"
 description = "Une bibliothèque Python pour Telegram."
 requires-python = ">=3.8"
@@ -13,7 +13,7 @@ dependencies = []  # Équivalent de install_requires, vide dans votre cas
 authors = [
     { name = "venantvr", email = "venantvr@gmail.com" },
 ]
-urls = { Homepage = "https://github.com/venantvr/Python.Trading.Telegram" }
+urls = { Homepage = "https://github.com/venantvr/Python.Trading.Telegram.Declarative" }
 
 [tool.setuptools.packages.find]
 # Cette table est l'équivalent moderne de packages=find_packages()

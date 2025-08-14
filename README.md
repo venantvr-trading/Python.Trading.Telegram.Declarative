@@ -1,4 +1,4 @@
-# Python.Trading.Telegram
+# Python.Trading.Telegram.Declarative
 
 Cette librairie facilite la gestion et la validation des arguments passés aux commandes dans un bot Telegram.
 
