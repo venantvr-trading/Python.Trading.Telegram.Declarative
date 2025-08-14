@@ -26,7 +26,6 @@ def command(
     :param description: Une courte description de la commande pour les menus d'aide.
     """
 
-    # noinspection PyUnresolvedReferences
     def decorator(func: Callable):
         command_name = name.strip()
         menu_name = menu.strip()
