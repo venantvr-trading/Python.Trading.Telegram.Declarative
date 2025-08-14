@@ -1,64 +1,71 @@
-# venantvr/telegram/handler.py
-from typing import Union, List
+from abc import abstractmethod
+from typing import Union
 
 from venantvr.telegram.classes.command import Command
+from venantvr.telegram.classes.menu import Menu
 from venantvr.telegram.classes.payload import TelegramPayload
-from venantvr.telegram.decorators import get_command
+from venantvr.telegram.classes.types import CommandActionType
 from venantvr.telegram.tools.logger import logger
 
 
 class TelegramHandler:
-    """
-    Classe de base pour les handlers de commandes Telegram.
-    Les commandes sont maintenant définies via le décorateur @command dans les sous-classes.
-    """
 
-    def process_command(self, command: Command, arguments: list) -> Union[TelegramPayload, List[TelegramPayload], None]:
+    def process_command(self, command: Command, arguments) -> TelegramPayload or list[TelegramPayload]:
         """
-        Traite une commande en la cherchant dans le registre et en l'exécutant.
+        Traite une commande reçue via Telegram.
         :param command: Commande à traiter.
         :param arguments: Liste des valeurs des arguments pour la commande.
-        :return: Résultat de la commande ou None si cette commande n'appartient pas à ce handler.
+        :return: Résultat ou réponse à la commande.
         """
-        command_details = get_command(command.value)
+        # Exécuter l'action associée à la commande
+        action_data = self.find_action(command)
+        if action_data != {}:
+            action = action_data.get("action")
+            # Trouver la définition de l'action pour connaître les noms des arguments attendus
+            kwargs = {}
+            for i, (key, expected_type) in enumerate(action_data["kwargs"].items()):
+                if i < len(arguments):
+                    try:
+                        # Convertir l'argument en type attendu s'il est spécifié
+                        kwargs[key] = expected_type(arguments[i])
+                    except ValueError:
+                        # Si la conversion échoue, on retourne un message d'erreur
+                        return [{"text": f"Argument '{key}' doit être de type {expected_type.__name__}.",
+                                 "reply_markup": ""}]
 
-        if not command_details:
-            logger.warning(f"Aucune action trouvée pour la commande '{command.value}' dans le registre.")
-            output: TelegramPayload = {"text": f"Commande '{command.value}' non reconnue.", "reply_markup": ""}
-            return output
-
-        action_func = command_details.get("action")
-        # Vérifie si la méthode de commande (ex: 'set_sell_price') existe sur l'instance actuelle ('self')
-        if not hasattr(self, action_func.__name__):
-            # Cette commande appartient à un autre handler, on l'ignore.
-            return None
-
-        kwargs_types = command_details.get("kwargs_types", {})
-        arg_names = command_details.get("arg_names", [])
-        kwargs = {}
-
-        if len(arguments) != len(arg_names):
-            logger.error(f"Nombre d'arguments incorrect pour {command.value}. Attendu: {len(arg_names)}, Reçu: {len(arguments)}")
-            output: TelegramPayload = {"text": f"Erreur interne: nombre d'arguments incorrect pour la commande.", "reply_markup": ""}
-            return output
-
-        # Conversion et validation des types
-        for i, arg_name in enumerate(arg_names):
-            try:
-                expected_type = kwargs_types.get(arg_name, str)  # str par défaut
-                kwargs[arg_name] = expected_type(arguments[i])
-            except (ValueError, TypeError) as e:
-                logger.error(f"Échec de la conversion du type pour l'argument '{arg_name}': {e}")
-                output: TelegramPayload = {
-                    "text": f"Argument '{arguments[i]}' pour '{arg_name}' est invalide. Type attendu : {expected_type.__name__}.",
-                    "reply_markup": ""
-                }
-                return output
-
-        # Récupère la méthode liée à l'instance `self` et l'exécute
-        bound_action = getattr(self, action_func.__name__)
-        return bound_action(**kwargs)
+            return action(*action_data.get("args"), **kwargs)  # action(**kwargs)
+        else:
+            return [{"text": "",
+                     "reply_markup": ""}]
 
     def bonjour(self) -> TelegramPayload:
-        """Exemple de commande qui peut être décorée dans une sous-classe."""
-        return {"text": f"Bonjour depuis {self.__class__.__name__}", "reply_markup": ""}
+        return {"text": f"Bonjour {self.__class__.__name__}",
+                "reply_markup": ""}
+
+    @property
+    @abstractmethod
+    def command_actions(self) -> CommandActionType:
+        """
+        Propriété qui retourne un dictionnaire de commandes et leurs actions associées.
+        """
+        pass
+
+    def find_action(self, command: Union[Command, Menu]) -> dict:  # <-- Préciser les types d'Enum possibles
+        action_data = {}
+        for key, value in self.command_actions.items():
+            if command in value:
+                action_data = value.get(command, {})  # Utiliser .get avec une valeur par défaut est plus sûr
+        return action_data
+
+    # noinspection PyUnresolvedReferences
+    def register_enums(self):
+        """Initialise les enums Command et Menu à partir de command_actions."""
+        commands = {}
+        menus = {}
+        for menu, actions in self.command_actions.items():
+            menus[menu.name] = menu.value
+            for command in actions.keys():
+                commands[command.name] = command.value
+        Command.register(commands)
+        Menu.register(menus)
+        logger.info("Enums Command et Menu enregistrés à partir de command_actions")
