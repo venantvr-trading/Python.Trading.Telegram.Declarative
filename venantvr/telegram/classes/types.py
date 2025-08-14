@@ -1,8 +1,9 @@
-from typing import Dict, Callable, Tuple, Union
+from typing import Dict, Callable, Tuple, Union, Optional
 from typing import TypedDict
 
 from venantvr.telegram.classes.command import Command
-from venantvr.telegram.classes.enums import DynamicEnumMember
+from venantvr.telegram.classes.dynamic_enum import DynamicEnumMember
+from venantvr.telegram.classes.menu import Menu
 
 # Définir des types pour les arguments possibles
 ArgumentType = Union[int, str, float]  # Ajoutez d'autres types si nécessaire
@@ -44,3 +45,8 @@ class BoolGuard:
         if self.__value:
             self.__value = False
 
+
+CommandActionType = Union[
+    dict[Optional[Menu], dict[Optional[Command], Union[dict, Action]]],
+    dict[Optional[DynamicEnumMember], dict[Optional[DynamicEnumMember], Union[dict, Action]]],
+]

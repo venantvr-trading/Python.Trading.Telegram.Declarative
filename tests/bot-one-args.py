@@ -15,7 +15,6 @@ from venantvr.telegram.notification import TelegramNotificationService
 from venantvr.telegram.tools.logger import logger
 
 load_dotenv()
-
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
 CHAT_ID = os.environ.get("CHAT_ID")
 
@@ -27,8 +26,6 @@ ENDPOINTS = {
 
 
 class MySimpleHandler(TelegramHandler):
-    """Un handler simple avec des commandes pour menu et bonjour."""
-
     @command(name="/help", menu="/main", description="Afficher le menu principal")
     def help(self) -> TelegramPayload:
         """Retourne un clavier interactif avec les commandes disponibles."""
@@ -44,11 +41,17 @@ class MySimpleHandler(TelegramHandler):
         logger.debug("Payload généré pour /help: %s", payload)
         return payload
 
-    @command(name="/bonjour", menu="/main", description="Dire bonjour")
-    def bonjour(self) -> TelegramPayload:
-        """Retourne un simple message de salutation."""
-        logger.debug("Exécution de la commande /bonjour")
-        payload: TelegramPayload = {"text": "Bonjour, le monde !", "reply_markup": ""}
+    @command(
+        name="/bonjour",
+        menu="/main",
+        description="Salutation personnalisée",
+        asks=["Quel est votre nom ?"],
+        kwargs_types={"name": str}
+    )
+    def bonjour(self, name: str) -> TelegramPayload:
+        """Salue l'utilisateur par son nom."""
+        logger.debug("Exécution de la commande /bonjour avec name=%s", name)
+        payload: TelegramPayload = {"text": f"Bonjour, {name} ! Bienvenue.", "reply_markup": ""}
         logger.debug("Payload généré pour /bonjour: %s", payload)
         return payload
 
@@ -59,7 +62,7 @@ class MySimpleHandler(TelegramHandler):
         actions = {
             menu_main: {
                 Command.from_value("/help"): {"action": self.help, "args": (), "kwargs": {}},
-                Command.from_value("/bonjour"): {"action": self.bonjour, "args": (), "kwargs": {}},
+                Command.from_value("/bonjour"): {"action": self.bonjour, "args": (), "kwargs": {"name": str}},
             }
         }
         logger.debug("command_actions défini: %s", actions)
@@ -71,8 +74,7 @@ if __name__ == "__main__":
         print("ERREUR : Impossible de trouver BOT_TOKEN ou CHAT_ID.")
         print("Veuillez créer un fichier .env et y mettre vos identifiants.")
     else:
-        # Configurer TelegramHistoryManager avec une base SQLite temporaire
-        db_path = "test_bot_no_args.db"
+        db_path = "test_bot_one_args.db"
         history_manager = TelegramHistoryManager(db_path)
 
         bot = TelegramNotificationService(
@@ -85,9 +87,10 @@ if __name__ == "__main__":
 
         my_handler = MySimpleHandler()
         bot.handler = my_handler
+        logger.info("COMMAND_REGISTRY après instanciation: %s", COMMAND_REGISTRY)
 
         print(f"Bot démarré pour le chat ID {CHAT_ID}.")
-        print("Envoyez /help à votre bot pour voir le menu.")
+        print("Envoyez /help ou /bonjour à votre bot.")
         print("Appuyez sur Ctrl+C pour arrêter.")
 
         try:
