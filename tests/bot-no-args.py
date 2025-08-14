@@ -1,158 +1,92 @@
+import json
 import os
-import queue
-import threading
 import time
-from typing import Callable, Optional
+from typing import Dict
 
-import requests
 from dotenv import load_dotenv
 
 from venantvr.telegram.classes.command import Command
 from venantvr.telegram.classes.menu import Menu
-from venantvr.telegram.decorators import COMMAND_REGISTRY
+from venantvr.telegram.classes.payload import TelegramPayload
+from venantvr.telegram.decorators import command, COMMAND_REGISTRY
+from venantvr.telegram.handler import TelegramHandler
+from venantvr.telegram.history import TelegramHistoryManager
+from venantvr.telegram.notification import TelegramNotificationService
+from venantvr.telegram.tools.logger import logger
 
 load_dotenv()
 
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
 CHAT_ID = os.environ.get("CHAT_ID")
 
-
-# COMMAND_REGISTRY: Dict[str, Dict[str, Any]] = {}
-
-
-def command(name: str, menu: str, description: str = ""):
-    def decorator(func: Callable):
-        command_enum = Command.from_value(name)
-        menu_enum = Menu.from_value(menu)
-        COMMAND_REGISTRY[name] = {"action": func, "menu": menu_enum, "enum": command_enum}
-        return func
-
-    return decorator
-
-
-class TelegramHandler:
-    def process_command(self, command: Command, arguments: list) -> Optional[dict]:
-        command_details = COMMAND_REGISTRY.get(command.value)
-        if not command_details: return None
-
-        action_func = command_details.get("action")
-        if hasattr(self, action_func.__name__):
-            bound_action = getattr(self, action_func.__name__)
-            return bound_action()
-        return None
-
-
-class TelegramBot:
-    def __init__(self, bot_token, chat_id):
-        self.api_url = f"https://api.telegram.org/bot{bot_token}"
-        self.chat_id = chat_id
-        self.last_update_id = None
-        self.incoming_queue = queue.Queue()
-        self.outgoing_queue = queue.Queue()
-        self.handler = None
-
-        threading.Thread(target=self._receiver, daemon=True).start()
-        threading.Thread(target=self._sender, daemon=True).start()
-        threading.Thread(target=self._processor, daemon=True).start()
-        print("Bot initialisé. Threads démarrés.")
-
-    def _receiver(self):
-        """Récupère les messages de Telegram (long polling)."""
-        while True:
-            try:
-                params = {"timeout": 30}
-                if self.last_update_id:
-                    params["offset"] = self.last_update_id + 1
-                response = requests.get(f"{self.api_url}/getUpdates", params=params, timeout=35)
-                response.raise_for_status()
-                updates = response.json().get("result", [])
-                for update in updates:
-                    self.last_update_id = update["update_id"]
-                    self.incoming_queue.put(update)
-            except requests.RequestException:
-                time.sleep(3)
-            except Exception as e:
-                print(f"Erreur dans _receiver: {e}")
-                time.sleep(10)
-
-    def _sender(self):
-        """Envoie les messages en attente dans la file sortante."""
-        while True:
-            payload = self.outgoing_queue.get()
-            if payload is None: break
-            try:
-                requests.post(f"{self.api_url}/sendMessage", json=payload, timeout=10)
-            except Exception as e:
-                print(f"Erreur dans _sender: {e}")
-            self.outgoing_queue.task_done()
-
-    def _processor(self):
-        """Traite les messages de la file entrante."""
-        while True:
-            update = self.incoming_queue.get()
-            if update is None: break
-
-            response_payload = None
-            if "message" in update and "text" in update["message"]:
-                text = update["message"]["text"]
-                if text == "/menu":
-                    response_payload = self._build_menu_keyboard("/menu")
-
-            elif "callback_query" in update:
-                command_str = update["callback_query"]["data"]
-                cmd_enum = Command.from_value(command_str)
-                if self.handler:
-                    response_payload = self.handler.process_command(cmd_enum, [])
-
-            if response_payload:
-                response_payload['chat_id'] = self.chat_id
-                self.send_message(response_payload)
-            self.incoming_queue.task_done()
-
-    def _build_menu_keyboard(self, menu_str: str) -> dict:
-        """Construit un clavier de menu."""
-        menu_enum = Menu.from_value(menu_str)
-        buttons = []
-        for cmd_details in COMMAND_REGISTRY.values():
-            if cmd_details['menu'] == menu_enum:
-                button_text = cmd_details['enum'].name.capitalize()
-                buttons.append([{"text": button_text, "callback_data": cmd_details['enum'].value}])
-
-        return {
-            "text": "Veuillez choisir une option :",
-            "reply_markup": {"inline_keyboard": buttons}
-        }
-
-    def send_message(self, payload: dict):
-        self.outgoing_queue.put(payload)
-
-    def stop(self):
-        self.outgoing_queue.put(None)
-        self.incoming_queue.put(None)
-        print("Signal d'arrêt envoyé aux threads.")
+API_BASE_URL = "https://api.telegram.org/bot"
+ENDPOINTS = {
+    "text": "/sendMessage",
+    "updates": "/getUpdates"
+}
 
 
 class MySimpleHandler(TelegramHandler):
-    """Un handler simple avec une seule commande."""
+    """Un handler simple avec des commandes pour menu et bonjour."""
 
-    @command(name="/bonjour", menu="/menu", description="Dire bonjour")
-    def bonjour(self) -> dict:
+    @command(name="/help", menu="/main", description="Afficher le menu principal")
+    def help(self) -> TelegramPayload:
+        """Retourne un clavier interactif avec les commandes disponibles."""
+        logger.debug("Exécution de la commande /help")
+        buttons = [
+            [{"text": cmd["enum"].name.capitalize(), "callback_data": cmd["enum"].value}]
+            for cmd in COMMAND_REGISTRY.values() if cmd["menu"] == Menu.from_value("/main")
+        ]
+        payload: TelegramPayload = {
+            "text": "Veuillez choisir une option :",
+            "reply_markup": json.dumps({"inline_keyboard": buttons})
+        }
+        logger.debug("Payload généré pour /help: %s", payload)
+        return payload
+
+    @command(name="/bonjour", menu="/main", description="Dire bonjour")
+    def bonjour(self) -> TelegramPayload:
         """Retourne un simple message de salutation."""
-        return {"text": "Bonjour, le monde !"}
+        logger.debug("Exécution de la commande /bonjour")
+        payload: TelegramPayload = {"text": "Bonjour, le monde !", "reply_markup": ""}
+        logger.debug("Payload généré pour /bonjour: %s", payload)
+        return payload
 
+    @property
+    def command_actions(self) -> Dict[Menu, Dict[Command, Dict]]:
+        """Définit les actions associées aux commandes."""
+        menu_main = Menu.from_value("/main")
+        actions = {
+            menu_main: {
+                Command.from_value("/help"): {"action": self.help, "args": (), "kwargs": {}},
+                Command.from_value("/bonjour"): {"action": self.bonjour, "args": (), "kwargs": {}},
+            }
+        }
+        logger.debug("command_actions défini: %s", actions)
+        return actions
 
 if __name__ == "__main__":
-    if "VOTRE" in BOT_TOKEN or "VOTRE" in CHAT_ID:
-        print("ERREUR : Veuillez configurer votre BOT_TOKEN et CHAT_ID en haut du fichier.")
+    if not BOT_TOKEN or not CHAT_ID:
+        print("ERREUR : Impossible de trouver BOT_TOKEN ou CHAT_ID.")
+        print("Veuillez créer un fichier .env et y mettre vos identifiants.")
     else:
-        bot = TelegramBot(bot_token=BOT_TOKEN, chat_id=CHAT_ID)
+        # Configurer TelegramHistoryManager avec une base SQLite temporaire
+        db_path = "test_bot_no_args.db"
+        history_manager = TelegramHistoryManager(db_path)
+
+        bot = TelegramNotificationService(
+            api_base_url=API_BASE_URL,
+            bot_token=BOT_TOKEN,
+            chat_id=CHAT_ID,
+            endpoints=ENDPOINTS,
+            history_manager=history_manager
+        )
 
         my_handler = MySimpleHandler()
-
         bot.handler = my_handler
 
         print(f"Bot démarré pour le chat ID {CHAT_ID}.")
-        print("Envoyez /menu à votre bot.")
+        print("Envoyez /help à votre bot pour voir le menu.")
         print("Appuyez sur Ctrl+C pour arrêter.")
 
         try:
@@ -161,3 +95,4 @@ if __name__ == "__main__":
         except KeyboardInterrupt:
             bot.stop()
             print("\nBot arrêté proprement.")
+            os.remove(db_path)
