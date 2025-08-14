@@ -65,6 +65,7 @@ class MySimpleHandler(TelegramHandler):
         logger.debug("command_actions défini: %s", actions)
         return actions
 
+
 if __name__ == "__main__":
     if not BOT_TOKEN or not CHAT_ID:
         print("ERREUR : Impossible de trouver BOT_TOKEN ou CHAT_ID.")

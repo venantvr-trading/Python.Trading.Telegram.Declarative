@@ -17,6 +17,7 @@ from venantvr.telegram.tools.utils import truncate_text
 
 CommandsHandlers = list[Callable[[Command], str]]
 
+
 class TelegramNotificationService(BaseService):
     """
     Orchestre la gestion des commandes et des interactions Telegram.

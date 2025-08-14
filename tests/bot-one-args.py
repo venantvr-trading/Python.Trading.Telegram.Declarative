@@ -24,6 +24,7 @@ ENDPOINTS = {
     "updates": "/getUpdates"
 }
 
+
 class MySimpleHandler(TelegramHandler):
     @command(name="/help", menu="/main", description="Afficher le menu principal")
     def help(self) -> TelegramPayload:
@@ -66,6 +67,7 @@ class MySimpleHandler(TelegramHandler):
         }
         logger.debug("command_actions défini: %s", actions)
         return actions
+
 
 if __name__ == "__main__":
     if not BOT_TOKEN or not CHAT_ID:
