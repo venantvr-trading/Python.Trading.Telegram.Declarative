@@ -5,7 +5,7 @@ from typing import Callable, Union
 
 from venantvr.telegram.base import BaseService
 from venantvr.telegram.classes.command import Command
-from venantvr.telegram.classes.dynamic_enum import DynamicEnumMember
+from venantvr.telegram.classes.enums import DynamicEnumMember
 from venantvr.telegram.classes.menu import Menu
 from venantvr.telegram.classes.payload import TelegramPayload
 from venantvr.telegram.classes.types import CurrentPrompt

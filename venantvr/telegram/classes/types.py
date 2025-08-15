@@ -2,7 +2,7 @@ from typing import Dict, Callable, Tuple, Union, Optional
 from typing import TypedDict
 
 from venantvr.telegram.classes.command import Command
-from venantvr.telegram.classes.dynamic_enum import DynamicEnumMember
+from venantvr.telegram.classes.enums import DynamicEnumMember
 from venantvr.telegram.classes.menu import Menu
 
 # Définir des types pour les arguments possibles

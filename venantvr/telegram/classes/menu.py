@@ -1,4 +1,4 @@
-from venantvr.telegram.classes.dynamic_enum import DynamicEnum
+from venantvr.telegram.classes.enums import DynamicEnum
 
 
 class Menu(DynamicEnum):

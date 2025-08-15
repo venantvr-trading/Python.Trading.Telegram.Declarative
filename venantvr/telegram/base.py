@@ -10,7 +10,7 @@ import requests
 from requests import Response
 
 from venantvr.telegram.classes.command import Command
-from venantvr.telegram.classes.dynamic_enum import DynamicEnum, DynamicEnumMember
+from venantvr.telegram.classes.enums import DynamicEnum, DynamicEnumMember
 from venantvr.telegram.classes.payload import TelegramPayload
 from venantvr.telegram.history import TelegramHistoryManager
 from venantvr.telegram.tools.logger import logger

@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import Optional
 
 from venantvr.telegram.classes.command import Command
-from venantvr.telegram.classes.dynamic_enum import DynamicEnumMember
+from venantvr.telegram.classes.enums import DynamicEnumMember
 from venantvr.telegram.classes.types import CurrentPrompt
 
 
