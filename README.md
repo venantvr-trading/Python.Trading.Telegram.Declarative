@@ -24,28 +24,8 @@ A robust, modular Python framework for building Telegram bots with declarative c
 ## Architecture
 
 <div align="center">
-  <img src="architecture_diagram.png" alt="Architecture Diagram" width="50%">
+  <img src="architecture_diagram.png" alt="Architecture Diagram" width="75%">
 </div>
-
-<details>
-<summary>ASCII Version</summary>
-
-```
-┌──────────────────────────────────────────────┐
-│        TelegramService (Orchestrator)        │
-├──────────────────────────────────────────────┤
-│                                              │
-│  ┌──────────────────┐  ┌──────────────────┐  │
-│  │  TelegramClient  │  │  HistoryManager  │  │
-│  └──────────────────┘  └──────────────────┘  │
-│         │                                    │
-│  ┌──────┴──────────┐  ┌───────────────────┐  │
-│  │  MessageSender  │  │  MessageReceiver  │  │
-│  └─────────────────┘  └───────────────────┘  │
-└──────────────────────────────────────────────┘
-```
-
-</details>
 
 ### Components
 
