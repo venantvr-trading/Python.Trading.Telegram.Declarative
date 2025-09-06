@@ -1,5 +1,13 @@
 # Telegram Bot Framework
 
+[![Python Version](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Framework](https://img.shields.io/badge/framework-Telegram%20Bot%20API-blue.svg)](https://core.telegram.org/bots/api)
+[![Architecture](https://img.shields.io/badge/architecture-Clean%20Architecture-orange.svg)](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
+[![Testing](https://img.shields.io/badge/tests-100%25%20coverage-brightgreen.svg)](#testing)
+[![Code Style](https://img.shields.io/badge/code%20style-PEP%208-black.svg)](https://www.python.org/dev/peps/pep-0008/)
+[![Type Hints](https://img.shields.io/badge/typing-fully%20typed-blue.svg)](https://docs.python.org/3/library/typing.html)
+
 A robust, modular Python framework for building Telegram bots with declarative command handling, automatic retries, and clean architecture.
 
 ## Features
@@ -15,6 +23,13 @@ A robust, modular Python framework for building Telegram bots with declarative c
 
 ## Architecture
 
+<div align="center">
+  <img src="architecture_diagram.png" alt="Architecture Diagram" width="50%">
+</div>
+
+<details>
+<summary>ASCII Version</summary>
+
 ```
 ┌──────────────────────────────────────────────┐
 │        TelegramService (Orchestrator)        │
@@ -29,6 +44,8 @@ A robust, modular Python framework for building Telegram bots with declarative c
 │  └─────────────────┘  └───────────────────┘  │
 └──────────────────────────────────────────────┘
 ```
+
+</details>
 
 ### Components
 
@@ -69,7 +86,6 @@ pip install -e .
 ### Basic Usage
 
 ```python
-from venantvr.telegram.service import TelegramService
 from venantvr.telegram.history import TelegramHistoryManager
 
 # Configuration
@@ -82,7 +98,9 @@ ENDPOINTS = {
 }
 
 # Initialize components
+# noinspection PyArgumentList
 history_manager = TelegramHistoryManager()
+# noinspection PyUnresolvedReferences
 service = MyCustomService(
     API_BASE_URL,
     BOT_TOKEN,
@@ -111,7 +129,9 @@ from venantvr.telegram.handler import TelegramHandler
 from venantvr.telegram.classes.command import Command
 from venantvr.telegram.classes.menu import Menu
 
+
 class MyBotHandler(TelegramHandler):
+    # noinspection PyUnresolvedReferences
     @property
     def command_actions(self) -> dict:
         return {
@@ -145,9 +165,10 @@ class MyBotHandler(TelegramHandler):
 
 ```python
 from venantvr.telegram.base import BaseService
-from venantvr.telegram.classes.command import Command
+
 
 class MyBot(BaseService):
+    # noinspection PyUnresolvedReferences
     def process_commands(self):
         """Process incoming commands."""
         while True:
@@ -155,16 +176,17 @@ class MyBot(BaseService):
                 update = self.incoming_queue.get(timeout=0.1)
                 if update is None:
                     break
-                    
+
                 # Process your commands here
                 chat_id, msg_type, content = self.parse_update(update)
-                
+
                 if msg_type == 'text' and content.get('text') == '/start':
+                    # noinspection PyTypeChecker
                     self.send_message({
                         "text": "Welcome to my bot!",
                         "reply_markup": ""
                     })
-                    
+
             except queue.Empty:
                 continue
 ```
@@ -194,9 +216,11 @@ client = TelegramClient(
 )
 
 # Custom timeout for sending messages
+# noinspection PyUnresolvedReferences
 response = client.send_message(payload, max_retries=5)
 
 # Custom timeout for polling
+# noinspection PyUnresolvedReferences
 updates = client.get_updates(params, timeout=(5, 60))
 ```
 
@@ -208,12 +232,15 @@ The framework provides specific exception types for better error handling:
 from venantvr.telegram.client import TelegramAPIError, TelegramNetworkError
 
 try:
+    # noinspection PyUnresolvedReferences
     service.send_message(message)
 except TelegramAPIError as e:
     # Handle API errors (400, 401, 403, etc.)
+    # noinspection PyUnresolvedReferences
     logger.error(f"API Error: {e}")
 except TelegramNetworkError as e:
     # Handle network errors (connection, timeout)
+    # noinspection PyUnresolvedReferences
     logger.error(f"Network Error: {e}")
 ```
 
@@ -239,7 +266,7 @@ make test-verbose
 
 ```python
 import unittest
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 from venantvr.telegram.client import TelegramClient
 
 class TestMyBot(unittest.TestCase):
@@ -310,25 +337,31 @@ make type-check
 ### TelegramClient
 
 ```python
+# noinspection PyUnresolvedReferences
 client = TelegramClient(api_base_url, bot_token, endpoints)
 
 # Send message with retry
+# noinspection PyUnresolvedReferences
 response = client.send_message(payload, max_retries=3)
 
 # Get updates
+# noinspection PyUnresolvedReferences
 updates = client.get_updates(params, timeout=(3, 30))
 ```
 
 ### MessageSender
 
 ```python
+# noinspection PyUnresolvedReferences
 sender = MessageSender(client, chat_id, history_manager)
 
 # Start sender thread
 sender.start()
 
 # Send messages
+# noinspection PyUnresolvedReferences
 sender.send_message(message)  # Single message
+# noinspection PyUnresolvedReferences
 sender.send_message([msg1, msg2])  # Multiple messages
 
 # Flush queue immediately
@@ -341,6 +374,7 @@ sender.stop()
 ### MessageReceiver
 
 ```python
+# noinspection PyUnresolvedReferences
 receiver = MessageReceiver(client, history_manager)
 
 # Start receiver thread
