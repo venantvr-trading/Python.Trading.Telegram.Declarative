@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MessageSender for async message queue management
 - MessageReceiver for polling and update handling
 - TelegramService as main orchestrator
-- Comprehensive test suite with 100% coverage
+- Comprehensive test suite
 - Makefile with 60+ development commands
 - Full English documentation
 - Type hints throughout the codebase
@@ -67,7 +67,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Beta release for testing
 - Core functionality implementation
-- Basic test coverage
+- Basic test suite
 
 ### Known Issues
 

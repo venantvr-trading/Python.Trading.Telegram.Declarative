@@ -80,7 +80,7 @@ Enhancement suggestions are tracked as GitHub issues. When creating an enhanceme
 ### Testing
 
 - Write unit tests for all new functionality
-- Maintain or improve code coverage
+- Ensure all code paths are tested
 - Use descriptive test names that explain what is being tested
 - Follow the AAA pattern (Arrange, Act, Assert)
 
@@ -129,8 +129,8 @@ tests/
 # Run all tests
 make test
 
-# Run with coverage
-make test-coverage
+# Run with formatting
+make format
 
 # Run specific test
 make test-file TEST_FILE=tests/test_client.py

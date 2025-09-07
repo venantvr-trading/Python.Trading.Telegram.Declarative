@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Framework](https://img.shields.io/badge/framework-Telegram%20Bot%20API-blue.svg)](https://core.telegram.org/bots/api)
 [![Architecture](https://img.shields.io/badge/architecture-Clean%20Architecture-orange.svg)](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
-[![Testing](https://img.shields.io/badge/tests-100%25%20coverage-brightgreen.svg)](#testing)
+[![Testing](https://img.shields.io/badge/tests-passing-brightgreen.svg)](#testing)
 [![Code Style](https://img.shields.io/badge/code%20style-PEP%208-black.svg)](https://www.python.org/dev/peps/pep-0008/)
 [![Type Hints](https://img.shields.io/badge/typing-fully%20typed-blue.svg)](https://docs.python.org/3/library/typing.html)
 
@@ -17,7 +17,7 @@ A robust, modular Python framework for building Telegram bots with declarative c
 - 📊 **Queue Management**: Asynchronous message handling with thread-safe queues
 - 🛡️ **Error Handling**: Comprehensive error handling with specific exception types
 - 📝 **History Tracking**: Built-in conversation history management
-- 🧪 **Fully Tested**: 100% test coverage with unit and integration tests
+- 🧪 **Fully Tested**: Comprehensive test suite with unit and integration tests
 - 🎯 **Type Hints**: Full type annotation support
 - 🎨 **Declarative Command Handling**: Define commands with typed parameters
 
@@ -232,8 +232,8 @@ except TelegramNetworkError as e:
 # Run all tests
 make test
 
-# Run with coverage
-make test-coverage
+# Run with formatting
+make format
 
 # Run specific test file
 python -m unittest tests.test_client

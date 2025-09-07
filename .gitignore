@@ -26,16 +26,12 @@ wheels/
 *.egg
 
 # Testing
-.coverage
 .pytest_cache/
-htmlcov/
 .tox/
 .hypothesis/
 .mypy_cache/
 .dmypy.json
 dmypy.json
-coverage.xml
-*.cover
 .cache
 nosetests.xml
 

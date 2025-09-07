@@ -6,7 +6,6 @@ wheel
 
 # Testing
 pytest~=8.3.0
-pytest-cov~=5.0.0
 pytest-mock~=3.14.0
 unittest-xml-reporting~=3.2.0
 
