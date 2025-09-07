@@ -23,12 +23,12 @@ class TelegramNotificationService(BaseService):
     """
 
     def __init__(
-        self,
-        api_base_url,
-        bot_token,
-        chat_id,
-        endpoints,
-        history_manager: TelegramHistoryManager,
+            self,
+            api_base_url,
+            bot_token,
+            chat_id,
+            endpoints,
+            history_manager: TelegramHistoryManager,
     ):
         super().__init__(api_base_url, bot_token, chat_id, endpoints, history_manager)
         self._history_manager = history_manager
@@ -38,7 +38,7 @@ class TelegramNotificationService(BaseService):
 
     # noinspection PyMethodMayBeStatic
     def menu_keyboard(
-        self, commands: list[Union[Command, Menu]], items_per_line=3
+            self, commands: list[Union[Command, Menu]], items_per_line=3
     ) -> list[TelegramPayload]:
         """
         Displays a help menu with available commands as interactive buttons.
@@ -52,7 +52,7 @@ class TelegramNotificationService(BaseService):
             for cmd in commands
         ]
         inline_keyboard = [
-            buttons[i : i + items_per_line]
+            buttons[i: i + items_per_line]
             for i in range(0, len(buttons), items_per_line)
         ]
         keyboard: TelegramPayload = {
@@ -126,7 +126,7 @@ class TelegramNotificationService(BaseService):
                 logger.exception(f"Error during command processing: %s", e)
 
     def _handle_callback_query(
-        self, update: dict, chat_id: int
+            self, update: dict, chat_id: int
     ) -> list[TelegramPayload]:
         """Processes a Telegram callback query."""
         action, enum, arguments = self.parse_command(update)
@@ -174,7 +174,7 @@ class TelegramNotificationService(BaseService):
 
     # noinspection PyUnusedLocal
     def _execute_command(
-        self, command: Union[Command, DynamicEnumMember], arguments: list, chat_id: int
+            self, command: Union[Command, DynamicEnumMember], arguments: list, chat_id: int
     ) -> list[TelegramPayload]:
         """Executes a command by searching for its action in the handlers."""
         command_details = self._search_in_handlers(command)
@@ -189,11 +189,11 @@ class TelegramNotificationService(BaseService):
         return responses
 
     def _process_interactive_prompt(
-        self,
-        action: str,
-        command: Union[Command, DynamicEnumMember],
-        arguments: list,
-        chat_id: int,
+            self,
+            action: str,
+            command: Union[Command, DynamicEnumMember],
+            arguments: list,
+            chat_id: int,
     ) -> list[TelegramPayload]:
         """Processes an interactive prompt (ask/respond) with multiple questions."""
         # logger.debug("Traitement du prompt: action=%s, command=%s, arguments=%s", action, command, arguments)

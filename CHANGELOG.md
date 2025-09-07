@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - Complete architecture refactoring with separation of concerns
 - TelegramClient for HTTP communication with retry logic
 - MessageSender for async message queue management
@@ -19,12 +20,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Type hints throughout the codebase
 
 ### Changed
+
 - Refactored BaseService to use new architecture
 - Improved error handling with specific exception types
 - Enhanced threading with proper cleanup
 - Optimized message queue processing
 
 ### Fixed
+
 - Network error recovery with exponential backoff
 - Thread synchronization issues
 - Memory leaks in queue processing
@@ -33,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2024-01-01
 
 ### Added
+
 - Initial release of Telegram Bot Framework
 - Basic message sending and receiving
 - Command handling system
@@ -42,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Menu system with inline keyboards
 
 ### Features
+
 - Async message processing
 - Thread-safe queue management
 - Conversation history
@@ -50,6 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dynamic menu generation
 
 ### Documentation
+
 - Complete API reference
 - Usage examples
 - Installation guide
@@ -58,11 +64,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.9.0] - 2023-12-15
 
 ### Added
+
 - Beta release for testing
 - Core functionality implementation
 - Basic test coverage
 
 ### Known Issues
+
 - Threading improvements needed
 - Error handling enhancements required
 - Documentation incomplete
@@ -70,6 +78,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2023-11-01
 
 ### Added
+
 - Initial project structure
 - Basic Telegram API integration
 - Proof of concept implementation
@@ -79,6 +88,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Version Guidelines
 
 ### Version Format
+
 `MAJOR.MINOR.PATCH`
 
 - **MAJOR**: Incompatible API changes
@@ -86,17 +96,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **PATCH**: Backwards-compatible bug fixes
 
 ### Release Types
+
 - **Alpha**: `0.0.x` - Early development
 - **Beta**: `0.x.0` - Feature complete, testing phase
 - **Release Candidate**: `1.0.0-rc.x` - Final testing
 - **Stable**: `1.x.x` - Production ready
 
 ### Deprecated Features
+
 None yet.
 
 ### Upgrade Guide
 
 #### From 0.x to 1.0
+
 1. Update import statements to use new module structure
 2. Replace direct API calls with TelegramClient
 3. Update error handling to catch specific exceptions

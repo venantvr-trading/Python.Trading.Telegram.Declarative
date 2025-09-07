@@ -249,6 +249,7 @@ import unittest
 from unittest.mock import patch
 from venantvr.telegram.client import TelegramClient
 
+
 class TestMyBot(unittest.TestCase):
     def setUp(self):
         self.client = TelegramClient(
@@ -256,7 +257,7 @@ class TestMyBot(unittest.TestCase):
             "test-token",
             {"text": "/sendMessage", "updates": "/getUpdates"}
         )
-    
+
     @patch('requests.post')
     def test_send_message(self, mock_post):
         mock_post.return_value.status_code = 200
@@ -379,11 +380,11 @@ receiver.stop()
 
 ### Benchmarks
 
-| Operation        | Time    | Throughput    |
-|------------------|---------|---------------|
-| Send Message     | ~100ms  | 10 msg/s      |
-| Receive Update   | ~50ms   | 20 updates/s  |
-| Queue Processing | <1ms    | 1000+ msg/s   |
+| Operation        | Time   | Throughput   |
+|------------------|--------|--------------|
+| Send Message     | ~100ms | 10 msg/s     |
+| Receive Update   | ~50ms  | 20 updates/s |
+| Queue Processing | <1ms   | 1000+ msg/s  |
 
 ## Flow Example
 

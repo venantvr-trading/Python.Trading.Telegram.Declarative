@@ -16,12 +16,12 @@ class BaseService(TelegramService):
     """
 
     def __init__(
-        self,
-        api_base_url,
-        bot_token,
-        chat_id,
-        endpoints,
-        history_manager: TelegramHistoryManager,
+            self,
+            api_base_url,
+            bot_token,
+            chat_id,
+            endpoints,
+            history_manager: TelegramHistoryManager,
     ):
         super().__init__(api_base_url, bot_token, chat_id, endpoints, history_manager)
         self.start()  # Auto-start for compatibility with old API

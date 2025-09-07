@@ -189,7 +189,7 @@ class TestTelegramClient(unittest.TestCase):
         expected_delays = [0.5, 1.0, 2.0]  # 2^0 * 0.5, 2^1 * 0.5, 2^2 * 0.5
 
         for attempt, expected_delay in enumerate(expected_delays):
-            actual_delay = (2**attempt) * 0.5
+            actual_delay = (2 ** attempt) * 0.5
             self.assertEqual(actual_delay, expected_delay)
 
 

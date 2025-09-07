@@ -17,11 +17,11 @@ class Action(TypedDict):
 
 class CurrentPrompt:
     def __init__(
-        self,
-        action: str,
-        command: Union[Command, DynamicEnumMember],
-        arguments: list,
-        current_prompt_index: int = 0,
+            self,
+            action: str,
+            command: Union[Command, DynamicEnumMember],
+            arguments: list,
+            current_prompt_index: int = 0,
     ):
         self.action = action
         self.command = command

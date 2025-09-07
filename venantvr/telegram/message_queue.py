@@ -19,10 +19,10 @@ class MessageSender:
     """
 
     def __init__(
-        self,
-        client: TelegramClient,
-        chat_id: str,
-        history_manager: TelegramHistoryManager,
+            self,
+            client: TelegramClient,
+            chat_id: str,
+            history_manager: TelegramHistoryManager,
     ):
         self.__client = client
         self.__chat_id = chat_id

@@ -21,12 +21,12 @@ class TelegramService:
     """
 
     def __init__(
-        self,
-        api_base_url: str,
-        bot_token: str,
-        chat_id: str,
-        endpoints: dict,
-        history_manager: TelegramHistoryManager,
+            self,
+            api_base_url: str,
+            bot_token: str,
+            chat_id: str,
+            endpoints: dict,
+            history_manager: TelegramHistoryManager,
     ):
         self.__chat_id = chat_id
         self.__history_manager = history_manager
@@ -105,7 +105,7 @@ class TelegramService:
         return self.__receiver.parse_update(update)
 
     def parse_command(
-        self, command_update: dict
+            self, command_update: dict
     ) -> tuple[Optional[str], Optional[DynamicEnumMember], list]:
         """Parses a command from a callback query."""
         data = command_update.get("callback_query", {}).get("data", "")
@@ -122,7 +122,7 @@ class TelegramService:
 
     @staticmethod
     def _cast_to_enum(
-        value: str, enums: list[type[DynamicEnum]]
+            value: str, enums: list[type[DynamicEnum]]
     ) -> Optional[DynamicEnumMember]:
         """Attempts to cast a string to one of the dynamic enums."""
         for enum_class in enums:

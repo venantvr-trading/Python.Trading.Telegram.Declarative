@@ -11,7 +11,7 @@ from venantvr.telegram.tools.logger import logger
 class TelegramHandler:
 
     def process_command(
-        self, command: Command, arguments
+            self, command: Command, arguments
     ) -> TelegramPayload or list[TelegramPayload]:
         """
         Processes a command received via Telegram.
@@ -55,7 +55,7 @@ class TelegramHandler:
         pass
 
     def find_action(
-        self, command: Union[Command, Menu]
+            self, command: Union[Command, Menu]
     ) -> dict:  # <-- Specify possible Enum types
         action_data = {}
         for key, value in self.command_actions.items():

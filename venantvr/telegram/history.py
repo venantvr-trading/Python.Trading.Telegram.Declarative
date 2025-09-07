@@ -35,12 +35,12 @@ class TelegramHistoryManager:
             conn.commit()
 
     def log_interaction(
-        self,
-        direction: str,
-        chat_id: int,
-        message_type: str,
-        content: dict,
-        update_id: Optional[int] = None,
+            self,
+            direction: str,
+            chat_id: int,
+            message_type: str,
+            content: dict,
+            update_id: Optional[int] = None,
     ):
         """Journalise une interaction générique."""
         with sqlite3.connect(self.__db_path) as conn:

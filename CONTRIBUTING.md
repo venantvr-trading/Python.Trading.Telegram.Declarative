@@ -5,6 +5,7 @@ First off, thank you for considering contributing to the Telegram Bot Framework!
 ## Code of Conduct
 
 By participating in this project, you are expected to uphold our Code of Conduct:
+
 - Be respectful and inclusive
 - Welcome newcomers and help them get started
 - Focus on constructive criticism
@@ -91,6 +92,7 @@ Enhancement suggestions are tracked as GitHub issues. When creating an enhanceme
 - Reference issues and pull requests liberally after the first line
 
 Example:
+
 ```
 Add retry logic for network failures
 
@@ -176,6 +178,7 @@ make type-check  # Type checking
 ## Recognition
 
 Contributors will be recognized in:
+
 - The AUTHORS file
 - Release notes
 - Project documentation

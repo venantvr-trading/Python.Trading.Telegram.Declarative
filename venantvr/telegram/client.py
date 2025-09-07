@@ -53,7 +53,7 @@ class TelegramClient:
 
     @staticmethod
     def _post_with_retry(
-        url: str, payload: dict, max_retries: int = 3
+            url: str, payload: dict, max_retries: int = 3
     ) -> Optional[Response]:
         """Sends a POST request with automatic retry."""
         last_exception = None
@@ -78,7 +78,7 @@ class TelegramClient:
 
                 # Recoverable errors (5xx, 429, timeout)
                 last_exception = e
-                wait_time = (2**attempt) * 0.5  # exponential backoff
+                wait_time = (2 ** attempt) * 0.5  # exponential backoff
                 if attempt < max_retries - 1:
                     logger.warning(
                         "Attempt %d/%d failed (HTTP %s), retrying in %.1fs",
@@ -91,7 +91,7 @@ class TelegramClient:
 
             except (requests.ConnectionError, requests.Timeout) as e:
                 last_exception = e
-                wait_time = (2**attempt) * 0.5
+                wait_time = (2 ** attempt) * 0.5
                 if attempt < max_retries - 1:
                     logger.warning(
                         "Network error (attempt %d/%d), retrying in %.1fs: %s",

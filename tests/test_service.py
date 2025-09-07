@@ -28,7 +28,7 @@ class TestTelegramService(unittest.TestCase):
         self.mock_history_manager = Mock()
 
         with patch("venantvr.telegram.service.TelegramClient"), patch(
-            "venantvr.telegram.service.MessageSender"
+                "venantvr.telegram.service.MessageSender"
         ), patch("venantvr.telegram.service.MessageReceiver"):
             self.service = ConcreteTestService(
                 self.api_base_url,
@@ -284,7 +284,7 @@ class TestServiceIntegration(unittest.TestCase):
     @patch("venantvr.telegram.service.MessageSender")
     @patch("venantvr.telegram.service.MessageReceiver")
     def test_full_service_lifecycle(
-        self, mock_receiver_class, mock_sender_class, mock_client_class
+            self, mock_receiver_class, mock_sender_class, mock_client_class
     ):
         """Test complete service lifecycle."""
         # Arrange
