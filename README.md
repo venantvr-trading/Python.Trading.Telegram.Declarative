@@ -232,14 +232,14 @@ except TelegramNetworkError as e:
 # Run all tests
 make test
 
-# Run with formatting
+# Format code with black and isort
 make format
 
 # Run specific test file
 python -m unittest tests.test_client
 
-# Run with verbose output
-make test-verbose
+# Run tests with formatting first
+make check
 ```
 
 ### Writing Tests
@@ -306,11 +306,14 @@ The project follows PEP 8 style guidelines. Use the following tools:
 # Format code
 make format
 
-# Lint code
-make lint
+# Install dependencies (including dev dependencies)
+make install
 
-# Type checking
-make type-check
+# Update dependencies
+make update
+
+# Clean build artifacts
+make clean
 ```
 
 ## API Reference
