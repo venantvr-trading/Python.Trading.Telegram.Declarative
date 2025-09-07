@@ -5,16 +5,55 @@ build-backend = "setuptools.build_meta"
 
 [project]
 # Métadonnées du projet (équivalent des arguments de setup() )
-name = "Python.Trading.Telegram.Declarative"
+name = "venantvr-telegram"
 version = "0.1.0"
 description = "Une bibliothèque Python pour Telegram."
+readme = "README.md"
+license = {file = "LICENSE"}
 requires-python = ">=3.8"
-dependencies = []  # Équivalent de install_requires, vide dans votre cas
+dependencies = [
+    "requests~=2.32.4"
+]
 authors = [
     { name = "venantvr", email = "venantvr@gmail.com" },
 ]
-urls = { Homepage = "https://github.com/venantvr/Python.Trading.Telegram.Declarative" }
+
+# Classifiers PyPI pour une meilleure découvrabilité
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Communications :: Chat",
+    "Topic :: Software Development :: Libraries :: Python Modules"
+]
+
+[project.urls]
+Homepage = "https://github.com/venantvr/Python.Trading.Telegram.Declarative"
+Repository = "https://github.com/venantvr/Python.Trading.Telegram.Declarative.git"
+Issues = "https://github.com/venantvr/Python.Trading.Telegram.Declarative/issues"
+Documentation = "https://github.com/venantvr/Python.Trading.Telegram.Declarative#readme"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "black>=22.0",
+    "isort>=5.0",
+    "mypy>=1.0",
+    "flake8>=4.0"
+]
 
 [tool.setuptools.packages.find]
 # Cette table est l'équivalent moderne de packages=find_packages()
 # Elle indique à setuptools de chercher automatiquement les paquets dans le répertoire
+where = ["."]  # Chercher les packages à partir de la racine
+include = ["venantvr*"]  # Inclure seulement les packages venantvr
+exclude = ["tests*", "docs*"]  # Exclure les tests et docs
+
+[tool.setuptools.package-data]
+"*" = ["py.typed"]
