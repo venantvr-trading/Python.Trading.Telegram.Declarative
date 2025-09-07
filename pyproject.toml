@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 # Métadonnées du projet (équivalent des arguments de setup() )
-name = "venantvr-telegram"
+name = "Python.Trading.Telegram.Declarative"
 version = "0.1.0"
 description = "Une bibliothèque Python pour Telegram."
 readme = "README.md"
