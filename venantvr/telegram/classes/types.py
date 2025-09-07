@@ -1,5 +1,4 @@
-from typing import Dict, Callable, Tuple, Union, Optional
-from typing import TypedDict
+from typing import Callable, Dict, Optional, Tuple, TypedDict, Union
 
 from venantvr.telegram.classes.command import Command
 from venantvr.telegram.classes.enums import DynamicEnumMember
@@ -17,7 +16,13 @@ class Action(TypedDict):
 
 
 class CurrentPrompt:
-    def __init__(self, action: str, command: Union[Command, DynamicEnumMember], arguments: list, current_prompt_index: int = 0):
+    def __init__(
+        self,
+        action: str,
+        command: Union[Command, DynamicEnumMember],
+        arguments: list,
+        current_prompt_index: int = 0,
+    ):
         self.action = action
         self.command = command
         self.arguments = arguments
@@ -48,5 +53,8 @@ class BoolGuard:
 
 CommandActionType = Union[
     dict[Optional[Menu], dict[Optional[Command], Union[dict, Action]]],
-    dict[Optional[DynamicEnumMember], dict[Optional[DynamicEnumMember], Union[dict, Action]]],
+    dict[
+        Optional[DynamicEnumMember],
+        dict[Optional[DynamicEnumMember], Union[dict, Action]],
+    ],
 ]

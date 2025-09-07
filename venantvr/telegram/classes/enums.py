@@ -4,7 +4,7 @@ from typing import Optional, Type
 class DynamicEnumMember:
     """Représente un membre d'un enum dynamique (ex: Command.HELP)."""
 
-    def __init__(self, name: str, value: str, parent_enum: Type['DynamicEnum']):
+    def __init__(self, name: str, value: str, parent_enum: Type["DynamicEnum"]):
         self.name = name
         self.value = value
         self.parent_enum = parent_enum
@@ -27,6 +27,7 @@ class DynamicEnumMember:
 
 class DynamicEnum:
     """Classe de base pour créer des enums dont les membres sont injectés."""
+
     _members: dict[str, DynamicEnumMember] = {}
     _value_map: dict[str, DynamicEnumMember] = {}
 
@@ -46,7 +47,7 @@ class DynamicEnum:
         if value in cls._value_map:
             return cls._value_map[value]
         # Créer dynamiquement si non existant (pour les handlers)
-        name = value.lstrip('/').upper()
+        name = value.lstrip("/").upper()
         member = DynamicEnumMember(name, value, parent_enum=cls)
         cls._members[name] = member
         setattr(cls, name, member)

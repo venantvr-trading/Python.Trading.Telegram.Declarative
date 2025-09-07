@@ -8,85 +8,111 @@ from venantvr.telegram.tools.logger import logger
 
 
 class TelegramAPIError(Exception):
-    """Exception spécifique pour les erreurs de l'API Telegram."""
+    """Specific exception for Telegram API errors."""
+
     pass
 
 
 class TelegramNetworkError(Exception):
-    """Exception spécifique pour les erreurs réseau."""
+    """Specific exception for network errors."""
+
     pass
 
 
 class TelegramClient:
     """
-    Client HTTP pour l'API Telegram avec gestion d'erreurs et retry automatique.
-    Responsabilité unique: communication avec l'API Telegram.
+    HTTP client for Telegram API with error handling and automatic retry.
+    Single responsibility: communication with Telegram API.
     """
-    
+
     def __init__(self, api_base_url: str, bot_token: str, endpoints: dict):
         self.__api_base_url = api_base_url
         self.__bot_token = bot_token
         self.__text_endpoint = endpoints.get("text", "/sendMessage")
         self.__updates_endpoint = endpoints.get("updates", "/getUpdates")
-        self.__url_send = f"{self.__api_base_url}{self.__bot_token}{self.__text_endpoint}"
-        self.__url_updates = f"{self.__api_base_url}{self.__bot_token}{self.__updates_endpoint}"
+        self.__url_send = (
+            f"{self.__api_base_url}{self.__bot_token}{self.__text_endpoint}"
+        )
+        self.__url_updates = (
+            f"{self.__api_base_url}{self.__bot_token}{self.__updates_endpoint}"
+        )
 
     def send_message(self, payload: dict, max_retries: int = 3) -> Optional[Response]:
-        """Envoie un message via l'API Telegram avec retry automatique."""
+        """Sends a message via Telegram API with automatic retry."""
         return self._post_with_retry(self.__url_send, payload, max_retries)
 
     def get_updates(self, params: dict, timeout: tuple[int, int] = (3, 30)) -> dict:
-        """Récupère les mises à jour via l'API Telegram."""
+        """Retrieves updates via Telegram API."""
         try:
             response = requests.get(self.__url_updates, params=params, timeout=timeout)
             response.raise_for_status()
             return response.json()
         except requests.RequestException as e:
-            logger.error("Erreur lors de getUpdates: %s", e)
-            raise TelegramNetworkError(f"Erreur réseau getUpdates: {e}")
+            logger.error("Error during getUpdates: %s", e)
+            raise TelegramNetworkError(f"getUpdates network error: {e}")
 
     @staticmethod
-    def _post_with_retry(url: str, payload: dict, max_retries: int = 3) -> Optional[Response]:
-        """Envoie une requête POST avec retry automatique."""
+    def _post_with_retry(
+        url: str, payload: dict, max_retries: int = 3
+    ) -> Optional[Response]:
+        """Sends a POST request with automatic retry."""
         last_exception = None
-        
+
         for attempt in range(max_retries):
             try:
                 response = requests.post(url, data=payload, timeout=(3, 10))
                 response.raise_for_status()
                 return response
-                
+
             except requests.HTTPError as e:
                 status_code = e.response.status_code if e.response else None
-                
-                # Erreurs non-récupérables (4xx sauf 429)
+
+                # Non-recoverable errors (4xx except 429)
                 if status_code and 400 <= status_code < 500 and status_code != 429:
-                    logger.error("Erreur HTTP non-récupérable %d: %s", status_code, e.response.text if e.response else str(e))
-                    raise TelegramAPIError(f"Erreur API Telegram {status_code}: {e}")
-                
-                # Erreurs récupérables (5xx, 429, timeout)
+                    logger.error(
+                        "Non-recoverable HTTP error %d: %s",
+                        status_code,
+                        e.response.text if e.response else str(e),
+                    )
+                    raise TelegramAPIError(f"Telegram API error {status_code}: {e}")
+
+                # Recoverable errors (5xx, 429, timeout)
                 last_exception = e
-                wait_time = (2 ** attempt) * 0.5  # backoff exponentiel
+                wait_time = (2**attempt) * 0.5  # exponential backoff
                 if attempt < max_retries - 1:
-                    logger.warning("Tentative %d/%d échouée (HTTP %s), retry dans %.1fs", 
-                                 attempt + 1, max_retries, status_code, wait_time)
+                    logger.warning(
+                        "Attempt %d/%d failed (HTTP %s), retrying in %.1fs",
+                        attempt + 1,
+                        max_retries,
+                        status_code,
+                        wait_time,
+                    )
                     time.sleep(wait_time)
-                    
+
             except (requests.ConnectionError, requests.Timeout) as e:
                 last_exception = e
-                wait_time = (2 ** attempt) * 0.5
+                wait_time = (2**attempt) * 0.5
                 if attempt < max_retries - 1:
-                    logger.warning("Erreur réseau (tentative %d/%d), retry dans %.1fs: %s", 
-                                 attempt + 1, max_retries, wait_time, str(e))
+                    logger.warning(
+                        "Network error (attempt %d/%d), retrying in %.1fs: %s",
+                        attempt + 1,
+                        max_retries,
+                        wait_time,
+                        str(e),
+                    )
                     time.sleep(wait_time)
-                    
+
             except requests.RequestException as e:
-                logger.error("Erreur requête inattendue: %s", e)
-                raise TelegramNetworkError(f"Erreur réseau: {e}")
-        
-        # Toutes les tentatives ont échoué
-        logger.error("Échec après %d tentatives, abandon", max_retries)
+                logger.error("Unexpected request error: %s", e)
+                raise TelegramNetworkError(f"Network error: {e}")
+
+        # All attempts failed
+        logger.error("Failed after %d attempts, giving up", max_retries)
         if isinstance(last_exception, requests.HTTPError):
-            raise TelegramAPIError(f"API Error après {max_retries} tentatives: {last_exception}")
+            raise TelegramAPIError(
+                f"API Error after {max_retries} attempts: {last_exception}"
+            )
         else:
-            raise TelegramNetworkError(f"Network Error après {max_retries} tentatives: {last_exception}")
+            raise TelegramNetworkError(
+                f"Network Error after {max_retries} attempts: {last_exception}"
+            )

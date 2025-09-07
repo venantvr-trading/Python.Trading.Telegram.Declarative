@@ -13,4 +13,4 @@ def is_empty_or_none(value: Any) -> bool:
 
 
 def truncate_text(text, max_length=14):
-    return text[:max_length - 3] + '...' if len(text) > max_length else text
+    return text[: max_length - 3] + "..." if len(text) > max_length else text
