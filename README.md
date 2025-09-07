@@ -1,4 +1,4 @@
-# Telegram Bot Framework
+# Python Trading Telegram Declarative
 
 [![Python Version](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
@@ -47,8 +47,8 @@ A robust, modular Python framework for building Telegram bots with declarative c
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/telegram-bot-framework.git
-cd telegram-bot-framework
+git clone https://github.com/venantvr/Python.Trading.Telegram.Declarative.git
+cd Python.Trading.Telegram.Declarative
 
 # Create virtual environment
 python -m venv .venv
@@ -423,9 +423,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 
-- 📧 Email: support@example.com
-- 💬 Telegram: @yourusername
-- 🐛 Issues: [GitHub Issues](https://github.com/yourusername/telegram-bot-framework/issues)
+- 📧 Email: venantvr@gmail.com
+- 💬 Telegram: @venantvr
+- 🐛 Issues: [GitHub Issues](https://github.com/venantvr/Python.Trading.Telegram.Declarative/issues)
 
 ## Acknowledgments
 

@@ -6,11 +6,8 @@ Generate architecture diagram PNG from the current ASCII diagram in README.md
 # noinspection PyPackageRequirements
 import matplotlib.pyplot as plt
 # noinspection PyPackageRequirements
-import matplotlib.patches as patches
-# noinspection PyPackageRequirements
 from matplotlib.patches import FancyBboxPatch
 # noinspection PyPackageRequirements
-import numpy as np
 
 def create_architecture_diagram():
     fig, ax = plt.subplots(1, 1, figsize=(14, 10))
@@ -19,7 +16,7 @@ def create_architecture_diagram():
     main_color = '#2E86AB'
     component_color = '#A23B72'
     text_color = '#F18F01'
-    background_color = '#C73E1D'
+    # background_color = '#C73E1D'
     
     # Main container - TelegramService
     main_box = FancyBboxPatch(

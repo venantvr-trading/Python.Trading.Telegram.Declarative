@@ -1,4 +1,4 @@
-# Makefile for Telegram Bot Framework
+# Makefile for Python.Trading.Telegram.Declarative
 # Python project management and development tasks
 
 # Variables
@@ -6,7 +6,7 @@ PYTHON := python3
 PIP := $(PYTHON) -m pip
 VENV := .venv
 VENV_ACTIVATE := . $(VENV)/bin/activate
-PROJECT_NAME := telegram-bot-framework
+PROJECT_NAME := Python.Trading.Telegram.Declarative
 PACKAGE := venantvr.telegram
 TEST_PATH := tests
 SRC_PATH := venantvr
@@ -27,7 +27,7 @@ NC := \033[0m # No Color
 
 ## Help
 help: ## Show this help message
-	@echo '$(GREEN)Telegram Bot Framework - Makefile Commands$(NC)'
+	@echo '$(GREEN)Python.Trading.Telegram.Declarative - Makefile Commands$(NC)'
 	@echo ''
 	@echo 'Usage:'
 	@echo '  make $(YELLOW)<target>$(NC)'
