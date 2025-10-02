@@ -4,8 +4,8 @@ from unittest.mock import Mock, patch
 
 from tests.test_helpers import (create_test_message, create_test_messages,
                                 create_test_payload)
-from venantvr.telegram.client import TelegramAPIError, TelegramNetworkError
-from venantvr.telegram.message_queue import MessageReceiver, MessageSender
+from python_trading_telegram_declarative.client import TelegramAPIError, TelegramNetworkError
+from python_trading_telegram_declarative.message_queue import MessageReceiver, MessageSender
 
 
 # noinspection PyUnresolvedReferences,PyTypeChecker
@@ -46,7 +46,7 @@ class TestMessageSender(unittest.TestCase):
         message = create_test_payload()  # Message without content
 
         # Act
-        with patch("venantvr.telegram.message_queue.logger") as mock_logger:
+        with patch("python_trading_telegram_declarative.message_queue.logger") as mock_logger:
             self.sender.send_message(message)
 
         # Assert
@@ -260,7 +260,7 @@ class TestMessageReceiver(unittest.TestCase):
         ]  # Stop après une itération
 
         # Act
-        with patch("venantvr.telegram.message_queue.logger") as mock_logger:
+        with patch("python_trading_telegram_declarative.message_queue.logger") as mock_logger:
             self.receiver._message_receiver()
 
         # Assert

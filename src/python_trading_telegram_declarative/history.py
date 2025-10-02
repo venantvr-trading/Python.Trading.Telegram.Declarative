@@ -3,9 +3,9 @@ import sqlite3
 from datetime import datetime
 from typing import Optional
 
-from venantvr.telegram.classes.command import Command
-from venantvr.telegram.classes.enums import DynamicEnumMember
-from venantvr.telegram.classes.types import CurrentPrompt
+from python_trading_telegram_declarative.classes.command import Command
+from python_trading_telegram_declarative.classes.enums import DynamicEnumMember
+from python_trading_telegram_declarative.classes.types import CurrentPrompt
 
 
 class TelegramHistoryManager:

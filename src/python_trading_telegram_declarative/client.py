@@ -4,7 +4,7 @@ from typing import Optional
 import requests
 from requests import Response
 
-from venantvr.telegram.tools.logger import logger
+from python_trading_telegram_declarative.tools.logger import logger
 
 
 class TelegramAPIError(Exception):

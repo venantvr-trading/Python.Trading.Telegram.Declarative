@@ -1,11 +1,11 @@
 from abc import abstractmethod
 from typing import Union
 
-from venantvr.telegram.classes.command import Command
-from venantvr.telegram.classes.menu import Menu
-from venantvr.telegram.classes.payload import TelegramPayload
-from venantvr.telegram.classes.types import CommandActionType
-from venantvr.telegram.tools.logger import logger
+from python_trading_telegram_declarative.classes.command import Command
+from python_trading_telegram_declarative.classes.menu import Menu
+from python_trading_telegram_declarative.classes.payload import TelegramPayload
+from python_trading_telegram_declarative.classes.types import CommandActionType
+from python_trading_telegram_declarative.tools.logger import logger
 
 
 class TelegramHandler:

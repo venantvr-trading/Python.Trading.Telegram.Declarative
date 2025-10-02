@@ -4,12 +4,12 @@ import threading
 import time
 from typing import List, Union
 
-from venantvr.telegram.classes.payload import TelegramPayload
-from venantvr.telegram.client import (TelegramAPIError, TelegramClient,
+from python_trading_telegram_declarative.classes.payload import TelegramPayload
+from python_trading_telegram_declarative.client import (TelegramAPIError, TelegramClient,
                                       TelegramNetworkError)
-from venantvr.telegram.history import TelegramHistoryManager
-from venantvr.telegram.tools.logger import logger
-from venantvr.telegram.tools.utils import ensure_list, is_empty_or_none
+from python_trading_telegram_declarative.history import TelegramHistoryManager
+from python_trading_telegram_declarative.tools.logger import logger
+from python_trading_telegram_declarative.tools.utils import ensure_list, is_empty_or_none
 
 
 class MessageSender:

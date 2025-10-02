@@ -66,7 +66,7 @@ pip install -e .
 ### Basic Usage
 
 ```python
-from venantvr.telegram.history import TelegramHistoryManager
+from python_trading_telegram_declarative.history import TelegramHistoryManager
 
 # Configuration
 API_BASE_URL = "https://api.telegram.org/bot"
@@ -105,9 +105,9 @@ service.stop()
 ### Declarative Command Definition
 
 ```python
-from venantvr.telegram.handler import TelegramHandler
-from venantvr.telegram.classes.command import Command
-from venantvr.telegram.classes.menu import Menu
+from python_trading_telegram_declarative.handler import TelegramHandler
+from python_trading_telegram_declarative.classes.command import Command
+from python_trading_telegram_declarative.classes.menu import Menu
 
 
 class MyBotHandler(TelegramHandler):
@@ -144,7 +144,7 @@ class MyBotHandler(TelegramHandler):
 ### Creating a Custom Bot
 
 ```python
-from venantvr.telegram.base import BaseService
+from python_trading_telegram_declarative.base import BaseService
 
 
 class MyBot(BaseService):
@@ -187,7 +187,7 @@ LOG_LEVEL=INFO
 ### Timeout Configuration
 
 ```python
-from venantvr.telegram.client import TelegramClient
+from python_trading_telegram_declarative.client import TelegramClient
 
 client = TelegramClient(
     api_base_url="https://api.telegram.org/bot",
@@ -209,7 +209,7 @@ updates = client.get_updates(params, timeout=(5, 60))
 The framework provides specific exception types for better error handling:
 
 ```python
-from venantvr.telegram.client import TelegramAPIError, TelegramNetworkError
+from python_trading_telegram_declarative.client import TelegramAPIError, TelegramNetworkError
 
 try:
     # noinspection PyUnresolvedReferences
@@ -247,7 +247,7 @@ make check
 ```python
 import unittest
 from unittest.mock import patch
-from venantvr.telegram.client import TelegramClient
+from python_trading_telegram_declarative.client import TelegramClient
 
 
 class TestMyBot(unittest.TestCase):
@@ -271,24 +271,23 @@ class TestMyBot(unittest.TestCase):
 
 ```
 .
-├── venantvr/
-│   └── telegram/
-│       ├── base.py              # Base service class
-│       ├── client.py            # HTTP client
-│       ├── message_queue.py     # Queue management
-│       ├── service.py           # Main orchestrator
-│       ├── notification.py      # Notification service
-│       ├── handler.py           # Command handlers
-│       ├── history.py           # History management
-│       ├── classes/             # Data models
-│       │   ├── command.py
-│       │   ├── enums.py
-│       │   ├── menu.py
-│       │   ├── payload.py
-│       │   └── types.py
-│       └── tools/               # Utilities
-│           ├── logger.py
-│           └── utils.py
+├── python_trading_telegram_declarative/
+│   ├── base.py              # Base service class
+│   ├── client.py            # HTTP client
+│   ├── message_queue.py     # Queue management
+│   ├── service.py           # Main orchestrator
+│   ├── notification.py      # Notification service
+│   ├── handler.py           # Command handlers
+│   ├── history.py           # History management
+│   ├── classes/             # Data models
+│   │   ├── command.py
+│   │   ├── enums.py
+│   │   ├── menu.py
+│   │   ├── payload.py
+│   │   └── types.py
+│   └── tools/               # Utilities
+│       ├── logger.py
+│       └── utils.py
 ├── tests/                       # Test suite
 │   ├── test_client.py
 │   ├── test_message_queue.py

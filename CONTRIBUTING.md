@@ -106,7 +106,7 @@ Fixes #123
 ## Project Structure
 
 ```
-venantvr/telegram/
+python_trading_telegram_declarative/
 ├── base.py              # Base service class
 ├── client.py            # HTTP client with retry logic
 ├── message_queue.py     # Queue management

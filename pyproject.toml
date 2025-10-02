@@ -1,15 +1,15 @@
 [build-system]
-# Ces lignes indiquent à pip d'utiliser setuptools pour construire votre paquet
-requires = ["setuptools>=61.0", "wheel"]
+requires = [
+    "setuptools>=61.0",
+    "wheel",
+]
 build-backend = "setuptools.build_meta"
 
 [project]
-# Métadonnées du projet (équivalent des arguments de setup() )
-name = "Python.Trading.Telegram.Declarative"
+name = "python_trading_telegram_declarative"
 version = "0.1.0"
 description = "Une bibliothèque Python pour Telegram."
 readme = "README.md"
-license = { file = "LICENSE" }
 requires-python = ">=3.8"
 dependencies = [
     "requests~=2.32.4",
@@ -17,8 +17,6 @@ dependencies = [
 authors = [
     { name = "venantvr", email = "venantvr@gmail.com" },
 ]
-
-# Classifiers PyPI pour une meilleure découvrabilité
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -30,8 +28,11 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Topic :: Communications :: Chat",
-    "Topic :: Software Development :: Libraries :: Python Modules"
+    "Topic :: Software Development :: Libraries :: Python Modules",
 ]
+
+[project.license]
+file = "LICENSE"
 
 [project.urls]
 Homepage = "https://github.com/venantvr/Python.Trading.Telegram.Declarative"
@@ -41,37 +42,38 @@ Documentation = "https://github.com/venantvr/Python.Trading.Telegram.Declarative
 
 [project.optional-dependencies]
 dev = [
-    # Build tools
     "setuptools~=80.9.0",
     "wheel",
-    # Testing
     "pytest~=8.3.0",
     "pytest-mock~=3.14.0",
     "unittest-xml-reporting~=3.2.0",
-    # Code quality
     "black~=24.8.0",
     "flake8~=7.1.0",
     "mypy~=1.11.0",
     "pylint~=3.2.0",
     "isort~=5.13.0",
     "pre-commit~=3.8.0",
-    # Documentation
     "sphinx~=7.4.0",
     "pdoc~=14.6.0",
-    # Security
     "pip-audit~=2.7.0",
-    # Development utilities
     "watchdog~=4.0.0",
     "pipdeptree~=2.23.0",
     "ipython~=8.26.0",
 ]
 
 [tool.setuptools.packages.find]
-# Cette table est l'équivalent moderne de packages=find_packages()
-# Elle indique à setuptools de chercher automatiquement les paquets dans le répertoire
-where = ["src"]  # Chercher les packages à partir de src
-include = ["venantvr*"]  # Inclure seulement les packages venantvr
-exclude = ["tests*", "docs*"]  # Exclure les tests et docs
+where = [
+    "src",
+]
+include = [
+    "python_trading_telegram_declarative*",
+]
+exclude = [
+    "tests*",
+    "docs*",
+]
 
 [tool.setuptools.package-data]
-"*" = ["py.typed"]
+"*" = [
+    "py.typed",
+]

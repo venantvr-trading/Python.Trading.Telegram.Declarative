@@ -3,7 +3,7 @@ from unittest.mock import Mock, patch
 
 import requests
 
-from venantvr.telegram.client import (TelegramAPIError, TelegramClient,
+from python_trading_telegram_declarative.client import (TelegramAPIError, TelegramClient,
                                       TelegramNetworkError)
 
 
@@ -17,7 +17,7 @@ class TestTelegramClient(unittest.TestCase):
         self.endpoints = {"text": "/sendMessage", "updates": "/getUpdates"}
         self.client = TelegramClient(self.api_base_url, self.bot_token, self.endpoints)
 
-    @patch("venantvr.telegram.client.requests.post")
+    @patch("python_trading_telegram_declarative.client.requests.post")
     def test_send_message_success(self, mock_post):
         """Test successful message sending."""
         # Arrange
@@ -38,7 +38,7 @@ class TestTelegramClient(unittest.TestCase):
         self.assertIn("data", call_args.kwargs)
         self.assertEqual(call_args.kwargs["data"], payload)
 
-    @patch("venantvr.telegram.client.requests.post")
+    @patch("python_trading_telegram_declarative.client.requests.post")
     def test_send_message_with_retry_on_500_error(self, mock_post):
         """Test automatic retry on 500 error."""
         # Arrange
@@ -65,7 +65,7 @@ class TestTelegramClient(unittest.TestCase):
         self.assertEqual(result, mock_response_success)
         self.assertEqual(mock_post.call_count, 2)
 
-    @patch("venantvr.telegram.client.requests.post")
+    @patch("python_trading_telegram_declarative.client.requests.post")
     def test_send_message_fail_on_400_error(self, mock_post):
         """Test immediate failure on 400 error (non-recoverable)."""
         # Arrange
@@ -86,7 +86,7 @@ class TestTelegramClient(unittest.TestCase):
         self.assertIn("400", str(context.exception))
         mock_post.assert_called_once()  # No retry on 400
 
-    @patch("venantvr.telegram.client.requests.post")
+    @patch("python_trading_telegram_declarative.client.requests.post")
     def test_send_message_retry_on_network_error(self, mock_post):
         """Test retry on network error."""
         # Arrange
@@ -105,7 +105,7 @@ class TestTelegramClient(unittest.TestCase):
         self.assertIsNotNone(result)
         self.assertEqual(mock_post.call_count, 2)
 
-    @patch("venantvr.telegram.client.requests.post")
+    @patch("python_trading_telegram_declarative.client.requests.post")
     def test_send_message_max_retries_exceeded(self, mock_post):
         """Test failure after exceeding max retry attempts."""
         # Arrange
@@ -120,7 +120,7 @@ class TestTelegramClient(unittest.TestCase):
         self.assertIn("3 attempts", str(context.exception))
         self.assertEqual(mock_post.call_count, 3)
 
-    @patch("venantvr.telegram.client.requests.post")
+    @patch("python_trading_telegram_declarative.client.requests.post")
     def test_send_message_rate_limiting_429(self, mock_post):
         """Test retry on 429 error (rate limiting)."""
         # Arrange
@@ -146,7 +146,7 @@ class TestTelegramClient(unittest.TestCase):
         self.assertEqual(result, mock_response_success)
         self.assertEqual(mock_post.call_count, 2)
 
-    @patch("venantvr.telegram.client.requests.get")
+    @patch("python_trading_telegram_declarative.client.requests.get")
     def test_get_updates_success(self, mock_get):
         """Test successful updates retrieval."""
         # Arrange
@@ -170,7 +170,7 @@ class TestTelegramClient(unittest.TestCase):
         call_args = mock_get.call_args
         self.assertEqual(call_args.kwargs["params"], params)
 
-    @patch("venantvr.telegram.client.requests.get")
+    @patch("python_trading_telegram_declarative.client.requests.get")
     def test_get_updates_network_error(self, mock_get):
         """Test network error during updates retrieval."""
         # Arrange

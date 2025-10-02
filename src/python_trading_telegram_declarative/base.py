@@ -1,9 +1,9 @@
 from abc import abstractmethod
 from typing import Callable
 
-from venantvr.telegram.classes.command import Command
-from venantvr.telegram.history import TelegramHistoryManager
-from venantvr.telegram.service import TelegramService
+from python_trading_telegram_declarative.classes.command import Command
+from python_trading_telegram_declarative.history import TelegramHistoryManager
+from python_trading_telegram_declarative.service import TelegramService
 
 CommandsHandlers = list[Callable[[Command], str]]
 

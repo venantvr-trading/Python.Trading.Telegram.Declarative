@@ -3,8 +3,8 @@ import unittest
 from unittest.mock import Mock, patch
 
 from tests.test_helpers import create_test_payload
-from venantvr.telegram.classes.enums import DynamicEnumMember
-from venantvr.telegram.service import TelegramService
+from python_trading_telegram_declarative.classes.enums import DynamicEnumMember
+from python_trading_telegram_declarative.service import TelegramService
 
 
 class ConcreteTestService(TelegramService):
@@ -27,9 +27,9 @@ class TestTelegramService(unittest.TestCase):
         self.endpoints = {"text": "/sendMessage", "updates": "/getUpdates"}
         self.mock_history_manager = Mock()
 
-        with patch("venantvr.telegram.service.TelegramClient"), patch(
-                "venantvr.telegram.service.MessageSender"
-        ), patch("venantvr.telegram.service.MessageReceiver"):
+        with patch("python_trading_telegram_declarative.service.TelegramClient"), patch(
+                "python_trading_telegram_declarative.service.MessageSender"
+        ), patch("python_trading_telegram_declarative.service.MessageReceiver"):
             self.service = ConcreteTestService(
                 self.api_base_url,
                 self.bot_token,
@@ -280,9 +280,9 @@ class TestTelegramService(unittest.TestCase):
 class TestServiceIntegration(unittest.TestCase):
     """Integration tests for TelegramService."""
 
-    @patch("venantvr.telegram.service.TelegramClient")
-    @patch("venantvr.telegram.service.MessageSender")
-    @patch("venantvr.telegram.service.MessageReceiver")
+    @patch("python_trading_telegram_declarative.service.TelegramClient")
+    @patch("python_trading_telegram_declarative.service.MessageSender")
+    @patch("python_trading_telegram_declarative.service.MessageReceiver")
     def test_full_service_lifecycle(
             self, mock_receiver_class, mock_sender_class, mock_client_class
     ):

@@ -4,14 +4,14 @@ import threading
 from abc import abstractmethod
 from typing import Optional, Union
 
-from venantvr.telegram.classes.command import Command
-from venantvr.telegram.classes.enums import DynamicEnum, DynamicEnumMember
-from venantvr.telegram.classes.menu import Menu
-from venantvr.telegram.classes.payload import TelegramPayload
-from venantvr.telegram.client import TelegramClient
-from venantvr.telegram.history import TelegramHistoryManager
-from venantvr.telegram.message_queue import MessageReceiver, MessageSender
-from venantvr.telegram.tools.logger import logger
+from python_trading_telegram_declarative.classes.command import Command
+from python_trading_telegram_declarative.classes.enums import DynamicEnum, DynamicEnumMember
+from python_trading_telegram_declarative.classes.menu import Menu
+from python_trading_telegram_declarative.classes.payload import TelegramPayload
+from python_trading_telegram_declarative.client import TelegramClient
+from python_trading_telegram_declarative.history import TelegramHistoryManager
+from python_trading_telegram_declarative.message_queue import MessageReceiver, MessageSender
+from python_trading_telegram_declarative.tools.logger import logger
 
 
 class TelegramService:

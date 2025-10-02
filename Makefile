@@ -2,7 +2,7 @@
 
 PYTHON := $(if $(wildcard .venv/bin/python),.venv/bin/python,python3)
 PIP := $(if $(wildcard .venv/bin/pip),.venv/bin/pip,pip3)
-SOURCES := src/venantvr
+SOURCES := src/python_trading_telegram_declarative
 
 # Default target
 help:

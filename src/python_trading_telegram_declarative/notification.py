@@ -3,16 +3,16 @@ import queue
 import time
 from typing import Callable, Union
 
-from venantvr.telegram.base import BaseService
-from venantvr.telegram.classes.command import Command
-from venantvr.telegram.classes.enums import DynamicEnumMember
-from venantvr.telegram.classes.menu import Menu
-from venantvr.telegram.classes.payload import TelegramPayload
-from venantvr.telegram.classes.types import CurrentPrompt
-from venantvr.telegram.handler import TelegramHandler
-from venantvr.telegram.history import TelegramHistoryManager
-from venantvr.telegram.tools.logger import logger
-from venantvr.telegram.tools.utils import truncate_text
+from python_trading_telegram_declarative.base import BaseService
+from python_trading_telegram_declarative.classes.command import Command
+from python_trading_telegram_declarative.classes.enums import DynamicEnumMember
+from python_trading_telegram_declarative.classes.menu import Menu
+from python_trading_telegram_declarative.classes.payload import TelegramPayload
+from python_trading_telegram_declarative.classes.types import CurrentPrompt
+from python_trading_telegram_declarative.handler import TelegramHandler
+from python_trading_telegram_declarative.history import TelegramHistoryManager
+from python_trading_telegram_declarative.tools.logger import logger
+from python_trading_telegram_declarative.tools.utils import truncate_text
 
 CommandsHandlers = list[Callable[[Command], str]]
 
