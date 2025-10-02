@@ -12,7 +12,7 @@ readme = "README.md"
 license = {file = "LICENSE"}
 requires-python = ">=3.8"
 dependencies = [
-    "requests~=2.32.4"
+    "requests~=2.32.4",
 ]
 authors = [
     { name = "venantvr", email = "venantvr@gmail.com" },
@@ -41,17 +41,35 @@ Documentation = "https://github.com/venantvr/Python.Trading.Telegram.Declarative
 
 [project.optional-dependencies]
 dev = [
-    "pytest>=7.0",
-    "black>=22.0",
-    "isort>=5.0",
-    "mypy>=1.0",
-    "flake8>=4.0"
+    # Build tools
+    "setuptools~=80.9.0",
+    "wheel",
+    # Testing
+    "pytest~=8.3.0",
+    "pytest-mock~=3.14.0",
+    "unittest-xml-reporting~=3.2.0",
+    # Code quality
+    "black~=24.8.0",
+    "flake8~=7.1.0",
+    "mypy~=1.11.0",
+    "pylint~=3.2.0",
+    "isort~=5.13.0",
+    "pre-commit~=3.8.0",
+    # Documentation
+    "sphinx~=7.4.0",
+    "pdoc~=14.6.0",
+    # Security
+    "pip-audit~=2.7.0",
+    # Development utilities
+    "watchdog~=4.0.0",
+    "pipdeptree~=2.23.0",
+    "ipython~=8.26.0",
 ]
 
 [tool.setuptools.packages.find]
 # Cette table est l'équivalent moderne de packages=find_packages()
 # Elle indique à setuptools de chercher automatiquement les paquets dans le répertoire
-where = ["."]  # Chercher les packages à partir de la racine
+where = ["src"]  # Chercher les packages à partir de src
 include = ["venantvr*"]  # Inclure seulement les packages venantvr
 exclude = ["tests*", "docs*"]  # Exclure les tests et docs
 
