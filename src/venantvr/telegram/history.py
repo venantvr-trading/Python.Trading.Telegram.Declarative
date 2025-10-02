@@ -9,6 +9,7 @@ from venantvr.telegram.classes.types import CurrentPrompt
 
 
 class TelegramHistoryManager:
+
     def __init__(self, db_path: str):
         self.__db_path = db_path
         self._create_schema()

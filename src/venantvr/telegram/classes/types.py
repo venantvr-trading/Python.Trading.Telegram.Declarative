@@ -16,6 +16,7 @@ class Action(TypedDict):
 
 
 class CurrentPrompt:
+
     def __init__(
             self,
             action: str,
@@ -30,6 +31,7 @@ class CurrentPrompt:
 
 
 class BoolGuard:
+
     def __init__(self, initial_value):
         self.__value = initial_value
 
