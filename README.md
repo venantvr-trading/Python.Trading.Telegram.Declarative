@@ -390,24 +390,26 @@ receiver.stop()
 
 ## Flow Example
 
-```
-User                                  Bot
- |                                     |
- |------- /start --------------------->|
- |<------ Welcome message -------------|
- |                                     |
- |------- /help ---------------------->|
- |<------ Command menu ----------------|
- |                                     |
- |------- Click button --------------->|
- |<------ Sub-menu --------------------|
- |                                     |
- |------- Interactive command -------->|
- |<------ Ask for parameter 1 ---------|
- |------- Send parameter 1 ----------->|
- |<------ Ask for parameter 2 ---------|
- |------- Send parameter 2 ----------->|
- |<------ Confirmation message --------|
+```mermaid
+sequenceDiagram
+    participant User
+    participant Bot
+
+    User->>Bot: /start
+    Bot->>User: Welcome message
+
+    User->>Bot: /help
+    Bot->>User: Command menu
+
+    User->>Bot: Click button
+    Bot->>User: Sub-menu
+
+    User->>Bot: Interactive command
+    Bot->>User: Ask for parameter 1
+    User->>Bot: Send parameter 1
+    Bot->>User: Ask for parameter 2
+    User->>Bot: Send parameter 2
+    Bot->>User: Confirmation message
 ```
 
 ## Contributing
