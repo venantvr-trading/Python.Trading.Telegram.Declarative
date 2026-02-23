@@ -453,3 +453,7 @@ See [CHANGELOG.md](CHANGELOG.md) for a list of changes.
 - [ ] Async/await support
 - [ ] Command validation decorators
 - [ ] Built-in command documentation
+
+## Stack
+
+[![Stack](https://skillicons.dev/icons?i=py,docker,git&theme=dark)](https://skillicons.dev)
