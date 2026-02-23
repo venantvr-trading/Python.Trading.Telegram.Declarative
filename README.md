@@ -456,4 +456,4 @@ See [CHANGELOG.md](CHANGELOG.md) for a list of changes.
 
 ## Stack
 
-[![Stack](https://skillicons.dev/icons?i=py,docker,git&theme=dark)](https://skillicons.dev)
+[![Stack](https://skillicons.dev/icons?i=py,docker&theme=dark)](https://skillicons.dev)
